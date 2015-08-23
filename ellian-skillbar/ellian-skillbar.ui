@@ -1,6 +1,6 @@
 {
-    "name": "skillbar",
-    "mainFile": "skillbar/skillbar.html",
+    "name": "ellian-skillbar",
+    "mainFile": "ellian-skillbar/ellian-skillbar.html",
     "rect": {
         "left": 70,
         "top": 670,

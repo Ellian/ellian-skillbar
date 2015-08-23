@@ -5,7 +5,7 @@
 /// <reference path="../vendor/jquery.d.ts" />
 /// <reference path="../cu/cu.ts" />
 
-module Skillbar {
+module EllianSkillbar {
     /* Constants */
 
     var BUTTON_WIDTH = 50;
@@ -138,7 +138,6 @@ module Skillbar {
     }
 
     /* Initialization */
-
     if (cu.HasAPI()) {
         cu.OnInitialized(() => {
             cuAPI.OnCharacterIDChanged(onCharacterIDChanged);

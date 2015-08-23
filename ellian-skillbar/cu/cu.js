@@ -192,7 +192,9 @@ var Ability = (function () {
         this.SetAsActive(-1, -1);
     };
     Ability.prototype.CurrentlyRunning = function () {
-        return this.startWorldTime > 0.0 && this.triggerWorldTime >= this.startWorldTime && this.triggerWorldTime + (this.duration - this.triggerTimeOffset) > this.cu.ServerTime();
+        return this.startWorldTime > 0.0 &&
+            this.triggerWorldTime >= this.startWorldTime &&
+            this.triggerWorldTime + (this.duration - this.triggerTimeOffset) > this.cu.ServerTime();
     };
     Ability.prototype.OnCooldown = function () {
         for (var i = 0, len = this.cooldowns.length; i < len; ++i) {
@@ -688,11 +690,12 @@ var KeyCode = {
         188: 0x33,
         190: 0x34,
         191: 0x35,
-        192: 0x29,
-        222: 0x28,
+        192: 0x28,
         219: 0x1A,
         220: 0x2B,
         221: 0x1B,
+        222: undefined,
+        223: 0x29,
     },
     jsModifiedByShift: {
         192: '~',
@@ -872,12 +875,6 @@ var CU = (function () {
                 if (_.isFunction(_this.gameClient.OnNewBlueprint)) {
                     _this.gameClient.OnNewBlueprint(function (index, name) { return _this.Fire('HandleNewBlueprint', index, name); });
                 }
-                if (_.isFunction(_this.gameClient.OnDownloadBlueprints)) {
-                    _this.gameClient.OnDownloadBlueprints(function (charID) { return _this.Fire('HandleDownloadBlueprints', charID); });
-                }
-                if (_.isFunction(_this.gameClient.OnUploadBlueprint)) {
-                    _this.gameClient.OnUploadBlueprint(function (charID, blueprintname, celldata) { return _this.Fire('HandleUploadBlueprint', charID, blueprintname, celldata); });
-                }
                 _this.onInit.InvokeCallbacks();
                 _this.gameServerURL = _this.gameClient.serverURL;
                 if (_this.gameServerURL) {
@@ -917,6 +914,7 @@ var CU = (function () {
         }
     };
     CU.prototype.HasAPI = function () {
+        // ellian return true;
         return typeof cuAPI !== 'undefined';
     };
     CU.prototype.ApiUrl = function (action) {
@@ -1080,7 +1078,9 @@ var CU = (function () {
         console.log('HandleAbilityActive newCurr=' + (current ? current.id : 'null') + ' oldCurr=' + (oldCurrent ? oldCurrent.id : 'null') + ' newQ=' + (queued ? queued.id : 'null') + ' oldQ=' + (oldQueued ? oldQueued.id : 'null'));
         this.currentAbility = current;
         this.queuedAbility = queued;
-        if (current !== oldCurrent || (current && (startTime != current.startWorldTime || triggerTime >= 0.0 && triggerTime != current.triggerWorldTime))) {
+        if (current !== oldCurrent ||
+            (current && (startTime != current.startWorldTime ||
+                triggerTime >= 0.0 && triggerTime != current.triggerWorldTime))) {
             updatedCurrent = true;
             if (current)
                 current.SetAsActive(startTime, triggerTime);
@@ -1182,16 +1182,6 @@ var CU = (function () {
     CU.prototype.RequestBlueprints = function () {
         if (cu.HasAPI()) {
             cuAPI.RequestBlueprints();
-        }
-    };
-    CU.prototype.DownloadBlueprints = function () {
-        if (cu.HasAPI()) {
-            cuAPI.DownloadBlueprints();
-        }
-    };
-    CU.prototype.ReceiveBlueprintFromServer = function (name, cellData, id) {
-        if (cu.HasAPI()) {
-            cuAPI.ReceiveBlueprintFromServer(name, cellData, id);
         }
     };
     CU.prototype.CommitBlock = function () {
@@ -1385,13 +1375,13 @@ var CU = (function () {
                             var hasCseLoginTokenMechanism = false;
                             for (var i = 0, length = mechanisms.length; i < length; i++) {
                                 var mechanism = self.GetElementNodeValue(mechanisms[i]);
-                                if (mechanism === XmppAuthMechanism[1]) {
+                                if (mechanism === XmppAuthMechanism[1 /* CSELOGINTOKEN */]) {
                                     hasCseLoginTokenMechanism = true;
                                     break;
                                 }
                             }
                             if (hasCseLoginTokenMechanism) {
-                                self.SendWebSocketMessage(self.$auth({ loginToken: loginToken, mechanism: XmppAuthMechanism[1] }));
+                                self.SendWebSocketMessage(self.$auth({ loginToken: loginToken, mechanism: XmppAuthMechanism[1 /* CSELOGINTOKEN */] }));
                             }
                         }
                         else {
@@ -1459,7 +1449,7 @@ var CU = (function () {
                         for (var i = 0, length = statuses.length; i < length; i++) {
                             var status = statuses[i];
                             var code = status.getAttribute('code');
-                            if (parseInt(code, 10) === 110 /* SELF */) {
+                            if (parseInt(code, 10) === XmppRoomStatus.SELF) {
                                 var jid = new JID(from);
                                 jid.EnsureHasUser();
                                 jid.EnsureHasDomain();
@@ -1614,19 +1604,19 @@ var CU = (function () {
         if (!_.isObject(attrs))
             attrs = {};
         if (!_.isString(attrs.mechanism)) {
-            attrs.mechanism = XmppAuthMechanism[0 /* PLAIN */];
+            attrs.mechanism = XmppAuthMechanism[XmppAuthMechanism.PLAIN];
         }
         else if (_.isNumber(attrs.mechanism)) {
             attrs.mechanism = XmppAuthMechanism[attrs.mechanism];
         }
         if (!_.isString(attrs.value)) {
             switch (XmppAuthMechanism[attrs.mechanism]) {
-                case XmppAuthMechanism[0 /* PLAIN */]:
+                case XmppAuthMechanism[XmppAuthMechanism.PLAIN]:
                     if (!_.isString(attrs.username) || !_.isString(attrs.password)) {
                         throw new Error('$auth with PLAIN mechanism requires username and password');
                     }
                     break;
-                case XmppAuthMechanism[1 /* CSELOGINTOKEN */]:
+                case XmppAuthMechanism[XmppAuthMechanism.CSELOGINTOKEN]:
                     if (!_.isString(attrs.loginToken)) {
                         throw new Error('$auth with CSELOGINTOKEN mechanism requires login token');
                     }
@@ -1650,10 +1640,10 @@ var CU = (function () {
                 }
                 else {
                     switch (attrs.mechanism) {
-                        case XmppAuthMechanism[0 /* PLAIN */]:
+                        case XmppAuthMechanism[XmppAuthMechanism.PLAIN]:
                             value = Base64.encode('\0' + attrs.username + '\0' + attrs.password);
                             break;
-                        case XmppAuthMechanism[1 /* CSELOGINTOKEN */]:
+                        case XmppAuthMechanism[XmppAuthMechanism.CSELOGINTOKEN]:
                             value = Base64.encode(attrs.loginToken);
                             break;
                     }
