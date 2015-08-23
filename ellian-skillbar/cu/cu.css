@@ -1,0 +1,156 @@
+﻿/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+@import "fonts.css";
+
+.abilityButton {
+    position: absolute;
+    height: 45px;
+    width: 45px;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    opacity: 0.8;
+}
+
+.abilityButton:hover,
+.abilityButton[cooldown='1'],
+.abilityButton[running='1'] {
+    opacity: 1.0;
+}
+
+.abilityButton[cooldown='1'] .abilityIcon {
+    -webkit-filter: grayscale(20%);
+}
+
+.abilityButton .abilityIcon {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    border: 0;
+    margin: 0;
+    padding: 0;
+    z-index: 1;
+}
+
+.abilityButton .cooldownRoot {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    z-index: 2;
+
+    background: #000;
+    opacity: 0.8;
+}
+
+.abilityButton .cooldownRoot .cooldownSlide {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    width: 100%;
+    height: 100%;
+
+    border: 0;
+    margin: 0;
+    padding: 0;
+    z-index: 3;
+    background: -webkit-linear-gradient(top, rgba(10,10,10,0) 0%, rgba(255,255,255,1) 100%);
+    opacity: 0.5;
+}
+
+.abilityButton .activeHighlight {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 4;
+    width: 100%;
+    height: 100%;
+    visibility: hidden;
+}
+
+.abilityButton[running='1'] .activeHighlight {
+    visibility: visible;
+}
+
+.abilityButton .queuedIcon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 45px;
+    width: 45px;
+    border: 0;
+    padding: 0;
+    z-index: 5;
+    visibility: hidden;
+}
+
+.abilityButton[queued='1'] .queuedIcon {
+    visibility: visible;
+}
+
+.abilityButton:not([cooldown='1']):not([running='1']):not([queued='1']) {
+    cursor: pointer;
+}
+
+#tooltip {
+    font-family: 'Merriweather Sans', sans-serif;
+    display: none;
+    position: absolute;
+    line-height: 120%;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.75);
+    border: #555 solid 1px;
+    box-shadow: 0px 0px 0px 3px rgba(0, 0, 0, 0.45);
+    -webkit-box-shadow: 0px 0px 0px 3px rgba(0, 0, 0, 0.45);
+    -moz-box-shadow: 0px 0px 0px 3px rgba(0, 0, 0, 0.45);
+    z-index: 9999;
+    left: 500px;
+    top: 250px;
+    width: 250px;
+    color: #ccc;
+    font-size: 12px;
+}
+
+#tooltip h1 {
+    color: #fff;
+    font-size: 14px;
+    margin-bottom: 4px;
+    margin-top: 0;
+}
+
+.disable-selection * {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.default-cursor * {
+    cursor: default;
+}
+
+.simple-scrollbar ::-webkit-scrollbar {
+    width: 5px;
+}
+
+.simple-scrollbar ::-webkit-scrollbar-track {
+    background-color: rgba(68, 68, 68, 0.45);
+}
+
+.simple-scrollbar ::-webkit-scrollbar-thumb {
+    background-color: rgba(138, 138, 138, 0.47);
+}
