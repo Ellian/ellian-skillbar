@@ -1,0 +1,26 @@
+﻿/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+html, body {
+    overflow: hidden;
+}
+
+#skillBar {
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    width: 1170px;
+    height: 80px;
+    margin: 0 0 0 -585px;
+    background-image: url('../images/skillbar/bar_skills_plate.png');
+}
+
+#skillButtons {
+    position: absolute;
+    width: 500px;
+    bottom: 50px;
+    left: 50%;
+    color: white;
+    margin: 0 0 0 -495px;
+}
