@@ -20,6 +20,8 @@ module EllianSkillbar {
     var abilities = [];
     var tooltip = null;
 
+    var dragSrcEl = null;
+
     /* Functions */
 
     function sortByAbilityID(a, b) {
@@ -38,17 +40,71 @@ module EllianSkillbar {
         tooltip = new Tooltip($skillButtons.children(), { leftOffset: 0, topOffset: -30 });
     }
 
+    function drop(e) {
+        console.log("drop");
+        // this/e.target is current target element.
+        if (e.stopPropagation) {
+            e.stopPropagation(); // Stops some browsers from redirecting.
+        }
+        // Don't do anything if dropping the same column we're dragging.
+        if (dragSrcEl != e.target) {
+            var data = e.dataTransfer.getData("text");
+            if (data == "copy") {
+                e.target.style.background = dragSrcEl.style.background;
+            }
+            if (data == "replace") {
+                e.target.style.background = dragSrcEl.style.background;
+                e.target.style = dragSrcEl.style;
+                tmpstyle = e.target.style;
+                tmpimage = e.target.style.background;
+                //switch style
+                e.target.style = dragSrcEl.style;
+                dragSrcEl.style = tmpstyle;
+                //switch image
+                e.target.style.background = dragSrcEl.style.background;
+                dragSrcEl.style.background = tmpimage;
+            }
+        }
+        dragSrcEl.style.opacity = '1';
+        return false;
+    }
+
+    function drag(e) {
+        console.log("drag");
+        //ev.dataTransfer.setData("text", ev.target.id);
+        //  e.target.style.opacity = '0.4';
+        e.dataTransfer.effectAllowed = 'copy';
+        e.dataTransfer.setData("text", "copy");
+    }
+
+    function allowDrop(e) {
+        e.preventDefault();
+    }
+
+
     function updateSkillbar() {
         $skillButtons.empty();
 
         updateSkillbarWidth(abilities.length);
 
-        abilities.sort(sortByAbilityID);
-
+        if (localStorage.getItem("ellian-skillbar") == null) {
+            abilities.sort(sortByAbilityID);
+        }
+        else {
+            // reload abilities
+            // TODO
+        }
         abilities.forEach((ability, i) => {
             var button = ability.MakeButton(i);
 
             var elem = button.rootElement.css({ left: (i * BUTTON_WIDTH + BUTTON_LEFT_OFFSET) + 'px', top: '0' });
+
+            elem.attr('draggable', 'true');
+            elem.on("drop", drop);
+            elem.on("dragstart", drag);
+
+            elem.on("dragover", allowDrop);
+
 
             if (ability.name) elem.attr('data-tooltip-title', ability.name);
 
