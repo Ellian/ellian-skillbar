@@ -349,7 +349,8 @@ class CUFakeGameAPI {
     OnAbilityCreated(callback: (abilityID: string, ability: string) => void): void { }
 
     OnAbilityDeleted(callback: (abilityID: string) => void): void { }
-
+    
+    RegisterAbility(abilityID: string, primaryBaseComponentID: string, secondaryBaseComponentID: string): void { }
 
     /* Items */
 

@@ -479,7 +479,7 @@ var KeyCode = {
     getKeyCodeFromEvent: e => {
         var keycode = null;
         if (window.event) {
-            keycode = window.event.keyCode;
+            keycode = window.event.keyCode;            
         } else if (e) {
             keycode = e.which;
         }
@@ -1102,15 +1102,19 @@ class CU {
         }
     }
 
-    RequestAllAbilities(loginToken, characterID, callback: (a: Ability[]) => any) {
+    RequestAllAbilities(loginToken, characterID, callback: (a: Ability[]) => any) {        
         if (!loginToken || !characterID) return null;
-
+        
         if (!this.allAbilitiesCallback) {
             this.allAbilitiesCallback = [callback];
+           
+              return $.getJSON('http://hatchery.camelotunchained.com:8000/api/abilities');
+            
+            /* ellian
             return $.getJSON(cu.SecureApiUrl('api/craftedabilities'), {
                 loginToken: loginToken,
                 characterID: characterID
-            });
+            }); */
         } else {
             this.allAbilitiesCallback.push(callback);
         }

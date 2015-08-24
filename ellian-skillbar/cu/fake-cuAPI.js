@@ -333,6 +333,7 @@ var CUFakeGameAPI = (function () {
     CUFakeGameAPI.prototype.OnAbilityError = function (c) { };
     CUFakeGameAPI.prototype.OnAbilityCreated = function (callback) { };
     CUFakeGameAPI.prototype.OnAbilityDeleted = function (callback) { };
+    CUFakeGameAPI.prototype.RegisterAbility = function (abilityID, primaryBaseComponentID, secondaryBaseComponentID) { };
     /* Items */
     CUFakeGameAPI.prototype.GetItem = function (itemID) { };
     CUFakeGameAPI.prototype.OnGetItem = function (callback) { };
