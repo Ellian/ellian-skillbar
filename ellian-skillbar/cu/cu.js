@@ -258,6 +258,7 @@ var AbilityButton = (function () {
         var $key = $('<span>').addClass('key').appendTo(this.rootElement);
         var keyBindName = 'Ability ' + (index + 1);
         cu.GetConfigVar(keyBindName);
+        $key.text("Z");
         cu.Listen('HandleReceiveConfigVar', function (configVar) {
             if (configVar && configVar.hasOwnProperty(keyBindName)) {
                 var key = KeyCode.dxKeyCodeMap[configVar[keyBindName]];
@@ -914,7 +915,6 @@ var CU = (function () {
         }
     };
     CU.prototype.HasAPI = function () {
-        // ellian return true;
         return typeof cuAPI !== 'undefined';
     };
     CU.prototype.ApiUrl = function (action) {
@@ -1002,7 +1002,8 @@ var CU = (function () {
             return null;
         if (!this.allAbilitiesCallback) {
             this.allAbilitiesCallback = [callback];
-            return $.getJSON('http://hatchery.camelotunchained.com:8000/api/abilities');
+            //return $.getJSON('http://hatchery.camelotunchained.com:8000/api/abilities');
+            return $.getJSON('../cu/abilities.json');
         }
         else {
             this.allAbilitiesCallback.push(callback);

@@ -349,7 +349,7 @@ class CUFakeGameAPI {
     OnAbilityCreated(callback: (abilityID: string, ability: string) => void): void { }
 
     OnAbilityDeleted(callback: (abilityID: string) => void): void { }
-    
+
     RegisterAbility(abilityID: string, primaryBaseComponentID: string, secondaryBaseComponentID: string): void { }
 
     /* Items */
@@ -374,8 +374,14 @@ class CUFakeGameAPI {
 
     /* Config */
 
-    OnReceiveConfigVars(c: (configs: string) => void): void { }
-    OnReceiveConfigVar(c: (config: any) => void): void { }
+    OnReceiveConfigVars(c: (configs: string) => void): void {
+        console.log("OnReceiveConfigVars");        
+        this._ev("OnReceiveConfigVars", c);         
+    }
+    OnReceiveConfigVar(c: (config: any) => void): void {
+        console.log("OnReceiveConfigVar");
+        this._ev("OnReceiveConfigVar", c);    
+    }
     OnConfigVarChanged(c: (isChangeSuccessful: boolean) => void): void { }
     SaveConfigChanges(): void { }
     OnSavedConfigChanges(c: () => void): void { }
@@ -383,8 +389,13 @@ class CUFakeGameAPI {
     ChangeConfigVar(variable: string, value: string): void { }
     CancelChangeConfig(variable: string): void { }
     CancelAllConfigChanges(tag: Tags): void { }
-    GetConfigVars(tag: Tags): void { }
-    GetConfigVar(variable: string): void { }
+    GetConfigVars(tag: Tags): void { 
+        console.log(tag); 
+    }
+    GetConfigVar(variable: string): void {
+        console.log(variable);
+        this._evf("OnReceiveConfigVar", ["Z"]);        
+    }
 
     /* Building */
     OnBuildingModeChanged(c: (buildingMode: boolean) => void): void {

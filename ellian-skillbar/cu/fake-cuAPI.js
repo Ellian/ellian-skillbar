@@ -346,8 +346,14 @@ var CUFakeGameAPI = (function () {
     CUFakeGameAPI.prototype.OnInventoryItemIDsChanged = function (callback) { };
     CUFakeGameAPI.prototype.EquipItem = function (itemID) { };
     /* Config */
-    CUFakeGameAPI.prototype.OnReceiveConfigVars = function (c) { };
-    CUFakeGameAPI.prototype.OnReceiveConfigVar = function (c) { };
+    CUFakeGameAPI.prototype.OnReceiveConfigVars = function (c) {
+        console.log("OnReceiveConfigVars");
+        this._ev("OnReceiveConfigVars", c);
+    };
+    CUFakeGameAPI.prototype.OnReceiveConfigVar = function (c) {
+        console.log("OnReceiveConfigVar");
+        this._ev("OnReceiveConfigVar", c);
+    };
     CUFakeGameAPI.prototype.OnConfigVarChanged = function (c) { };
     CUFakeGameAPI.prototype.SaveConfigChanges = function () { };
     CUFakeGameAPI.prototype.OnSavedConfigChanges = function (c) { };
@@ -355,8 +361,13 @@ var CUFakeGameAPI = (function () {
     CUFakeGameAPI.prototype.ChangeConfigVar = function (variable, value) { };
     CUFakeGameAPI.prototype.CancelChangeConfig = function (variable) { };
     CUFakeGameAPI.prototype.CancelAllConfigChanges = function (tag) { };
-    CUFakeGameAPI.prototype.GetConfigVars = function (tag) { };
-    CUFakeGameAPI.prototype.GetConfigVar = function (variable) { };
+    CUFakeGameAPI.prototype.GetConfigVars = function (tag) {
+        console.log(tag);
+    };
+    CUFakeGameAPI.prototype.GetConfigVar = function (variable) {
+        console.log(variable);
+        this._evf("OnReceiveConfigVar", ["Z"]);
+    };
     /* Building */
     CUFakeGameAPI.prototype.OnBuildingModeChanged = function (c) {
         this._ev("OnBuildingModeChanged", c);

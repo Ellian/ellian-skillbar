@@ -294,6 +294,8 @@ class AbilityButton {
 
         cu.GetConfigVar(keyBindName);
 
+        $key.text("Z");
+        
         cu.Listen('HandleReceiveConfigVar', (configVar) => {
             if (configVar && configVar.hasOwnProperty(keyBindName)) {
                 var key = KeyCode.dxKeyCodeMap[configVar[keyBindName]];
@@ -884,7 +886,7 @@ class CU {
                     this.gameClient.OnReceiveConfigVars((configs) => this.Fire('HandleReceiveConfigVars', configs));
                 }
 
-                if (_.isFunction(this.gameClient.OnReceiveConfigVar)) {
+                if (_.isFunction(this.gameClient.OnReceiveConfigVar)) {                    
                     this.gameClient.OnReceiveConfigVar((config) => this.Fire('HandleReceiveConfigVar', config));
                 }
 
@@ -1007,8 +1009,7 @@ class CU {
         }
     }
 
-    HasAPI(): boolean {
-        // ellian return true;
+    HasAPI(): boolean {        
         return typeof cuAPI !== 'undefined';
     }
 
@@ -1108,7 +1109,9 @@ class CU {
         if (!this.allAbilitiesCallback) {
             this.allAbilitiesCallback = [callback];
            
-              return $.getJSON('http://hatchery.camelotunchained.com:8000/api/abilities');
+              //return $.getJSON('http://hatchery.camelotunchained.com:8000/api/abilities');
+            
+              return $.getJSON('../cu/abilities.json');            
             
             /* ellian
             return $.getJSON(cu.SecureApiUrl('api/craftedabilities'), {
