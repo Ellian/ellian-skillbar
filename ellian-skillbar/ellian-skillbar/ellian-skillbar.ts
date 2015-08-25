@@ -38,28 +38,24 @@ module EllianSkillbar {
         tooltip = new Tooltip($skillButtons.children(), { leftOffset: 0, topOffset: -30 });
     }
 
-    function drop(e) {
-        console.log("drop");
-        // this/e.target is current target element.
-        if (e.stopPropagation) {
-            e.stopPropagation(); // Stops some browsers from redirecting.
-        }
+    function drop(slot) {
+        console.log("drop " + slot.id);              
         // Don't do anything if dropping the same column we're dragging.
-        if (dragSrcEl != this) {
+        if (dragSrcEl != slot) {
             var curPos = mapAbilities[dragSrcEl.id];
             console.log("curPos " + dragSrcEl.id + " " + curPos);
-            var targetPos = mapAbilities[this.id];
-            console.log("targetPos " + this.id + " " + targetPos);
+            var targetPos = mapAbilities[slot.id];
+            console.log("targetPos " + slot.id + " " + targetPos);
             mapAbilities[dragSrcEl.id] = targetPos;
-            mapAbilities[this.id] = curPos;
+            mapAbilities[slot.id] = curPos;
             updateSkillbar();
         }
         return false;
     }
-    function drag(e) {
-        console.log("drag " + e.target);
-        e.target.style.opacity = '0.4';
-        dragSrcEl = e.target;
+    function drag(slot) {
+        console.log("drag " + slot.id);
+        slot.style.opacity = '0.4';
+        dragSrcEl = slot;
     }
     function dragEnd(e) {
         dragSrcEl.style.opacity = '1';
@@ -71,6 +67,14 @@ module EllianSkillbar {
         return false;
     }
     function mouseDown(e) {
+        console.log("mousedown " + this.id);
+        drag(this);
+        e.stopPropagation();
+    }
+    function mouseUp(e) {         
+        console.log("mouseUp " + this.id);
+        dragSrcEl.style.opacity = '1';
+        drop(this);
         e.stopPropagation();
     }
     function orderAbilities(abils) {
@@ -126,11 +130,13 @@ module EllianSkillbar {
             $(slot).attr('id', ability.id).appendTo($skillButtons).attr(
                 'draggable', 'true');
 
-            slot.addEventListener("drop", drop, false);
-            slot.addEventListener("dragstart", drag, true);
+            slot.addEventListener("drop", drop, false);           
             slot.addEventListener("dragend", dragEnd, true);
             slot.addEventListener("dragover", allowDrop, false);
             slot.addEventListener("mousedown", mouseDown, true);
+          //  slot.addEventListener("mousemove", mouseMove, true);
+            slot.addEventListener("mouseup", mouseUp, true);
+        //    slot.addEventListener("mouseover", mouseOver, true);
 
             // Create button
             var button = ability.MakeButton(i);
