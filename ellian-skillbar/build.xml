@@ -4,8 +4,9 @@
 	<property environment="env" />
 
 	<target name="deploy" description="Copy the mod files into CU directory">
-		<copy file="ellian-skillbar\ActiveFrame.gif" tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-skillbar\ActiveFrame.gif" />
+<!--		<copy file="ellian-skillbar\ActiveFrame.gif" tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-skillbar\ActiveFrame.gif" />
 		<copy file="ellian-skillbar\ActiveFrame.gif" tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-skillbar\ActiveFrame.gif" />
+		-->
 
 		<copy file="ellian-skillbar\ellian-skillbar.css" tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-skillbar\ellian-skillbar.css" />
 		<copy file="ellian-skillbar\ellian-skillbar.css" tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-skillbar\ellian-skillbar.css" />
@@ -16,8 +17,8 @@
 		<copy file="ellian-skillbar\ellian-skillbar.js" tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-skillbar\ellian-skillbar.js" />
 		<copy file="ellian-skillbar\ellian-skillbar.js" tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-skillbar\ellian-skillbar.js" />
 
-		<copy file="ellian-skillbar\NextArrow.png" tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-skillbar\NextArrow.png" />
-		<copy file="ellian-skillbar\NextArrow.png" tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-skillbar\NextArrow.png" />
+	<!--	<copy file="ellian-skillbar\NextArrow.png" tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-skillbar\NextArrow.png" />
+		<copy file="ellian-skillbar\NextArrow.png" tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-skillbar\NextArrow.png" />-->
 
 		<copy file="ellian-skillbar.ui" tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-skillbar.ui" />
 		<copy file="ellian-skillbar.ui" tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-skillbar.ui" />
