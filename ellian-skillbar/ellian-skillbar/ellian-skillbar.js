@@ -41,13 +41,13 @@ var EllianSkillbar;
 			e.stopPropagation(); // Stops some browsers from redirecting.
 		}
 		// Don't do anything if dropping the same column we're dragging.
-		if (dragSrcEl != e.target) {
-			var curPos = mapAbilities[dragSrcEl.data - id];
-			console.log("curPos " + curPos);
-			var targetPos = mapAbilities[e.target.data - id];
-			console.log("targetPos " + targetPos);
-			mapAbilities[dragSrcEl.data - id] = targetPos;
-			mapAbilities[e.target.data - id] = curPos;
+		if (dragSrcEl != this) {
+			var curPos = mapAbilities[dragSrcEl.id];
+			console.log("curPos " + dragSrcEl.id + " " + curPos);
+			var targetPos = mapAbilities[this.id];
+			console.log("targetPos " + this.id + " " + targetPos);
+			mapAbilities[dragSrcEl.id] = targetPos;
+			mapAbilities[this.id] = curPos;
 			updateSkillbar();
 		}
 		return false;
@@ -56,16 +56,20 @@ var EllianSkillbar;
 		console.log("drag " + e.target);
 		e.target.style.opacity = '0.4';
 		dragSrcEl = e.target;
-		e.stopPropagation();
 	}
 	function dragEnd(e) {
 		dragSrcEl.style.opacity = '1';
 	}
 	function allowDrop(e) {
+		console.log("div allow drop");		
 		if (e.preventDefault) {
 			e.preventDefault(); // Necessary. Allows us to drop.
 		}
 		return false;
+	}
+	function mouseDown(e) {
+		console.log("div mouse down");
+		e.stopPropagation();
 	}
 	function orderAbilities(abils) {
 		var orderedAbilities = [];
@@ -102,10 +106,10 @@ var EllianSkillbar;
 				console.log("order");
 				// Order abilities
 				abilities = orderAbilities(abilities);
-				// for (i = 0; i < 50; i++) {
-				// Reset stored information
-				// localStorage.removeItem("ellian-skillbar-" + i);
-				// }
+				for (i = 0; i < 50; i++) {
+					// Reset stored information
+					localStorage.removeItem("ellian-skillbar-" + i);
+				}
 			}
 		}
 
@@ -114,19 +118,16 @@ var EllianSkillbar;
 			mapAbilities[ability.id] = i;
 
 			// Create slot
-		/*
-		 * var slot = document.createElement('div'); $(slot).attr('id',
-		 * ability.id).appendTo($skillButtons).attr( 'draggable', 'true'); /*
-		 * .on("drop", drop) .on("dragstart", drag) .on("dragend", dragEnd)
-		 * .on("dragover", allowDrop);
-		 */
 
-		/*
-		 * slot.addEventListener("drop", drop, true);
-		 * slot.addEventListener("dragstart", drag, true);
-		 * slot.addEventListener("dragend", dragEnd, true);
-		 * slot.addEventListener("dragover", allowDrop, true);
-		 */
+			var slot = document.createElement('div');
+			$(slot).attr('id', ability.id).appendTo($skillButtons).attr(
+					'draggable', 'true');
+
+			slot.addEventListener("drop", drop, false);
+			slot.addEventListener("dragstart", drag, true);
+			slot.addEventListener("dragend", dragEnd, true);
+			slot.addEventListener("dragover", allowDrop, false);
+			slot.addEventListener("mousedown", mouseDown, true);
 
 			// Create button
 			var button = ability.MakeButton(i);
@@ -140,21 +141,17 @@ var EllianSkillbar;
 			if (ability.tooltip)
 				elem.attr('data-tooltip-content', ability.tooltip);
 			elem.click(function() {
-				ability.Perform()
+				console.log("button click");
+				ability.Perform();
 			});
-			//elem.mousedown(function(){});
-			
-			elem.on("drop", drop);
-			elem.on("dragstart", drag);
-			elem.on("dragend", dragEnd);
-			elem.on("dragover", allowDrop);
-			elem.on('mousedown', function (event) {});
-
+			elem.mousedown(function() {
+				console.log("button mouse down");
+			});
 			elem.css('opacity', '1');
-			
-			//$(slot).append(elem);
-			
-			$skillButtons.append(elem);
+
+			$(slot).append(elem);
+
+			// $skillButtons.append(elem);
 		});
 		updateTooltip();
 	}
