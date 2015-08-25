@@ -81,7 +81,7 @@ module EllianSkillbar {
             }
         }
         return orderedAbilities;
-    }
+    }    
     function updateSkillbar() {
         console.log("updateSkillbar");
         $skillButtons.empty();
