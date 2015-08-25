@@ -365,7 +365,7 @@ var CUFakeGameAPI = (function () {
         console.log(tag);
     };
     CUFakeGameAPI.prototype.GetConfigVar = function (variable) {
-        console.log(variable);
+        // console.log(variable);
         this._evf("OnReceiveConfigVar", ["Z"]);
     };
     /* Building */

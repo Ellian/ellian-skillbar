@@ -393,7 +393,7 @@ class CUFakeGameAPI {
         console.log(tag); 
     }
     GetConfigVar(variable: string): void {
-        console.log(variable);
+       // console.log(variable);
         this._evf("OnReceiveConfigVar", ["Z"]);        
     }
 
