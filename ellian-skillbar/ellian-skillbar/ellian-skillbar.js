@@ -73,9 +73,9 @@ var EllianSkillbar;
 	}
 	function orderAbilities(abils) {
 		var orderedAbilities = [];
-		for (i = 1; i < abils.length; i++) {
+		for (i = 0; i < abils.length; i++) {
 			if (mapAbilities[abils[i].id] != null) {
-				orderedAbilities[mapAbilities[abils[i].id]] = abils[i].id;
+				orderedAbilities[mapAbilities[abils[i].id]] = abils[i];
 			}
 		}
 		return orderedAbilities;
