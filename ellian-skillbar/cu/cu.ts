@@ -1109,9 +1109,9 @@ class CU {
         if (!this.allAbilitiesCallback) {
             this.allAbilitiesCallback = [callback];
            
-              //return $.getJSON('http://hatchery.camelotunchained.com:8000/api/abilities');
+              return $.getJSON('http://hatchery.camelotunchained.com:8000/api/abilities');
             
-              return $.getJSON('../cu/abilities.json');            
+              //return $.getJSON('../cu/abilities.json');            
             
             /* ellian
             return $.getJSON(cu.SecureApiUrl('api/craftedabilities'), {

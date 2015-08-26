@@ -84,6 +84,10 @@ module EllianSkillbar {
                 orderedAbilities[mapAbilities[abils[i].id]] = abils[i];
             }
         }
+        if (orderedAbilities.length != abils.length) {
+            console.log("Something went wrong. We reset the sorting of the abilities.");
+            orderedAbilities = abilities.sort(sortByAbilityID);
+        }
         return orderedAbilities;
     }
     function updateSkillbar() {
@@ -103,9 +107,9 @@ module EllianSkillbar {
                     if (localStorage.getItem("ellian-skillbar-" + i) != null) {
                         mapAbilities[localStorage.getItem("ellian-skillbar-"
                             + i)] = i;
-                        console.log("cur pos "
-                            + localStorage.getItem("ellian-skillbar-" + i)
-                            + " " + i);
+                        //                        console.log("cur pos "
+                        //                            + localStorage.getItem("ellian-skillbar-" + i)
+                        //                            + " " + i);
                     }
                 }
                 abilities = orderAbilities(abilities);
@@ -153,7 +157,7 @@ module EllianSkillbar {
                 ability.Perform();
             });
             elem.css('opacity', '1');
-            elem.children()[3].innerHTML = defaultOrderAbilities[ability.id] + ":" + elem.children()[3].innerHTML;
+            elem.prepend("<span class='abilnum'>" + (defaultOrderAbilities[ability.id] + 1) + ":</span>");
 
             $(slot).append(elem);
 
@@ -161,18 +165,19 @@ module EllianSkillbar {
         });
         
         // tmp debug
-        for (var i = 0; i < 50; i++) {
-            // Reset stored information
-            if (localStorage.getItem("ellian-skillbar-" + i) != null) {
-                console.log("pos " + i + ": " + localStorage.getItem("ellian-skillbar-" + i));
-            }
-
-        }
+        //        for (var i = 0; i < 50; i++) {
+        //            // Reset stored information
+        //            if (localStorage.getItem("ellian-skillbar-" + i) != null) {
+        //                console.log("pos " + i + ": " + localStorage.getItem("ellian-skillbar-" + i));
+        //            }
+        //
+        //        }
 
         updateTooltip();
     }
 
     function onAbilityCreated(id, a) {
+        console.log("onAbilityCreated " + id);
         var craftedAbility = JSON.parse(a);
         craftedAbility.id = craftedAbility.id.toString(16);
         craftedAbility.tooltip = craftedAbility.tooltip || craftedAbility.notes;
@@ -182,6 +187,8 @@ module EllianSkillbar {
         var ability = cu.UpdateAbility(craftedAbility);
 
         abilities.push(ability);
+
+        defaultOrderAbilities[id] = abilities.length - 1;
 
         updateSkillbar();
     }
@@ -194,9 +201,19 @@ module EllianSkillbar {
                 abilities.splice(i, 1);
             }
         }
+        var curPos = defaultOrderAbilities[id];
+        for (var key in defaultOrderAbilities) {
+            console.log(key);
+            if (defaultOrderAbilities[key] >= curPos) {
+                defaultOrderAbilities[key] = defaultOrderAbilities[key] - 1;
+            }
+        }
+        mapAbilities[id] = null;
+        defaultOrderAbilities[id] = null;
     }
 
     function onAbilityDeleted(id) {
+        console.log("onAbilityDeleted " + id);
         removeAbilityById(id);
 
         updateSkillbar();
@@ -230,9 +247,11 @@ module EllianSkillbar {
 
             abilities.forEach(function(abil, i) {
                 defaultOrderAbilities[abil.id] = i;
+                console.log("def : " + abil.id + " " + i);
             });
-            
+
             updateSkillbar();
+
         });
 
         if (!req) return;
@@ -246,7 +265,7 @@ module EllianSkillbar {
                 abil.id = abil.id.toString(16);
                 abil.tooltip = abil.tooltip || abil.notes;
 
-                registerAbility(abil);                
+                registerAbility(abil);
             });
 
             cu.UpdateAllAbilities(abils);
@@ -256,6 +275,8 @@ module EllianSkillbar {
     /* Initialization */
     if (cu.HasAPI()) {
         cu.OnInitialized(() => {
+            cuAPI.CloseUI("skillbar");
+            
             cuAPI.OnCharacterIDChanged(onCharacterIDChanged);
 
             cuAPI.OnAbilityCreated(onAbilityCreated);

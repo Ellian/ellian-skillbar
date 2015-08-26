@@ -1002,8 +1002,7 @@ var CU = (function () {
             return null;
         if (!this.allAbilitiesCallback) {
             this.allAbilitiesCallback = [callback];
-            //return $.getJSON('http://hatchery.camelotunchained.com:8000/api/abilities');
-            return $.getJSON('../cu/abilities.json');
+            return $.getJSON('http://hatchery.camelotunchained.com:8000/api/abilities');
         }
         else {
             this.allAbilitiesCallback.push(callback);

@@ -76,6 +76,10 @@ var EllianSkillbar;
                 orderedAbilities[mapAbilities[abils[i].id]] = abils[i];
             }
         }
+        if (orderedAbilities.length != abils.length) {
+            console.log("Something went wrong. We reset the sorting of the abilities.");
+            orderedAbilities = abilities.sort(sortByAbilityID);
+        }
         return orderedAbilities;
     }
     function updateSkillbar() {
@@ -95,9 +99,6 @@ var EllianSkillbar;
                     if (localStorage.getItem("ellian-skillbar-" + i) != null) {
                         mapAbilities[localStorage.getItem("ellian-skillbar-"
                             + i)] = i;
-                        console.log("cur pos "
-                            + localStorage.getItem("ellian-skillbar-" + i)
-                            + " " + i);
                     }
                 }
                 abilities = orderAbilities(abilities);
@@ -139,26 +140,29 @@ var EllianSkillbar;
                 ability.Perform();
             });
             elem.css('opacity', '1');
-            elem.children()[3].innerHTML = defaultOrderAbilities[ability.id] + ":" + elem.children()[3].innerHTML;
+            elem.prepend("<span class='abilnum'>" + (defaultOrderAbilities[ability.id] + 1) + ":</span>");
             $(slot).append(elem);
             // $skillButtons.append(elem);
         });
         // tmp debug
-        for (var i = 0; i < 50; i++) {
-            // Reset stored information
-            if (localStorage.getItem("ellian-skillbar-" + i) != null) {
-                console.log("pos " + i + ": " + localStorage.getItem("ellian-skillbar-" + i));
-            }
-        }
+        //        for (var i = 0; i < 50; i++) {
+        //            // Reset stored information
+        //            if (localStorage.getItem("ellian-skillbar-" + i) != null) {
+        //                console.log("pos " + i + ": " + localStorage.getItem("ellian-skillbar-" + i));
+        //            }
+        //
+        //        }
         updateTooltip();
     }
     function onAbilityCreated(id, a) {
+        console.log("onAbilityCreated " + id);
         var craftedAbility = JSON.parse(a);
         craftedAbility.id = craftedAbility.id.toString(16);
         craftedAbility.tooltip = craftedAbility.tooltip || craftedAbility.notes;
         registerAbility(craftedAbility);
         var ability = cu.UpdateAbility(craftedAbility);
         abilities.push(ability);
+        defaultOrderAbilities[id] = abilities.length - 1;
         updateSkillbar();
     }
     function removeAbilityById(id) {
@@ -168,8 +172,18 @@ var EllianSkillbar;
                 abilities.splice(i, 1);
             }
         }
+        var curPos = defaultOrderAbilities[id];
+        for (var key in defaultOrderAbilities) {
+            console.log(key);
+            if (defaultOrderAbilities[key] >= curPos) {
+                defaultOrderAbilities[key] = defaultOrderAbilities[key] - 1;
+            }
+        }
+        mapAbilities[id] = null;
+        defaultOrderAbilities[id] = null;
     }
     function onAbilityDeleted(id) {
+        console.log("onAbilityDeleted " + id);
         removeAbilityById(id);
         updateSkillbar();
     }
@@ -196,6 +210,7 @@ var EllianSkillbar;
             abilities = abils;
             abilities.forEach(function (abil, i) {
                 defaultOrderAbilities[abil.id] = i;
+                console.log("def : " + abil.id + " " + i);
             });
             updateSkillbar();
         });
@@ -216,6 +231,7 @@ var EllianSkillbar;
     /* Initialization */
     if (cu.HasAPI()) {
         cu.OnInitialized(function () {
+            cuAPI.CloseUI("skillbar");
             cuAPI.OnCharacterIDChanged(onCharacterIDChanged);
             cuAPI.OnAbilityCreated(onAbilityCreated);
             cuAPI.OnAbilityDeleted(onAbilityDeleted);

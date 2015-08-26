@@ -62,11 +62,23 @@ html, body {
 .key {
     position: relative;
     bottom: -1px;
-    left: 1px;
+    left: 0px;
     width: 45px;
     text-align: center;
     color: #eeeeee;
     font-family: Arial, sans-serif;
     font-size: 9px;
     z-index: 1;
+}
+
+.abilnum {
+    position: relative;
+    bottom: -1px;
+    left: 0px;
+    width: 45px;
+    text-align: center;
+    color: #eeeeee;
+    font-family: Arial, sans-serif;
+    font-size: 9px;
+    z-index: 2;
 }
