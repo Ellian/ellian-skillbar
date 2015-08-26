@@ -258,7 +258,7 @@ var AbilityButton = (function () {
         var $key = $('<span>').addClass('key').appendTo(this.rootElement);
         var keyBindName = 'Ability ' + (index + 1);
         cu.GetConfigVar(keyBindName);
-        $key.text("Z");
+        $key.text(String.fromCharCode(65 + index));
         cu.Listen('HandleReceiveConfigVar', function (configVar) {
             if (configVar && configVar.hasOwnProperty(keyBindName)) {
                 var key = KeyCode.dxKeyCodeMap[configVar[keyBindName]];

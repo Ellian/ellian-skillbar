@@ -294,8 +294,8 @@ class AbilityButton {
 
         cu.GetConfigVar(keyBindName);
 
-        $key.text("Z");
-        
+        $key.text(String.fromCharCode(65 + index));
+                
         cu.Listen('HandleReceiveConfigVar', (configVar) => {
             if (configVar && configVar.hasOwnProperty(keyBindName)) {
                 var key = KeyCode.dxKeyCodeMap[configVar[keyBindName]];

@@ -354,11 +354,16 @@ var CUFakeGameAPI = (function () {
         console.log("OnReceiveConfigVar");
         this._ev("OnReceiveConfigVar", c);
     };
-    CUFakeGameAPI.prototype.OnConfigVarChanged = function (c) { };
+    CUFakeGameAPI.prototype.OnConfigVarChanged = function (c) { 
+    	this._ev("OnConfigVarChanged", c);
+    };
     CUFakeGameAPI.prototype.SaveConfigChanges = function () { };
     CUFakeGameAPI.prototype.OnSavedConfigChanges = function (c) { };
     CUFakeGameAPI.prototype.RestoreConfigDefaults = function (tag) { };
-    CUFakeGameAPI.prototype.ChangeConfigVar = function (variable, value) { };
+    CUFakeGameAPI.prototype.ChangeConfigVar = function (variable, value) {
+    	this._evf("OnConfigVarChanged", [variable, value]);
+    	
+    };
     CUFakeGameAPI.prototype.CancelChangeConfig = function (variable) { };
     CUFakeGameAPI.prototype.CancelAllConfigChanges = function (tag) { };
     CUFakeGameAPI.prototype.GetConfigVars = function (tag) {
