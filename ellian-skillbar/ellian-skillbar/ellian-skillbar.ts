@@ -49,6 +49,8 @@ module EllianSkillbar {
             mapAbilities[dragSrcEl.id] = targetPos;
             mapAbilities[slot.id] = curPos;
             updateSkillbar();
+        } else {
+            dragSrcEl = null;
         }
         return false;
     }
