@@ -57,9 +57,6 @@ module EllianSkillbar {
         slot.style.opacity = '0.4';
         dragSrcEl = slot;
     }
-    function dragEnd(e) {
-        dragSrcEl.style.opacity = '1';
-    }
     function allowDrop(e) {
         if (e.preventDefault) {
             e.preventDefault(); // Necessary. Allows us to drop.
@@ -130,8 +127,7 @@ module EllianSkillbar {
             $(slot).attr('id', ability.id).appendTo($skillButtons).attr(
                 'draggable', 'true');
 
-            slot.addEventListener("drop", drop, false);           
-            slot.addEventListener("dragend", dragEnd, true);
+           // slot.addEventListener("dragend", dragEnd, true);
             slot.addEventListener("dragover", allowDrop, false);
             slot.addEventListener("mousedown", mouseDown, true);
           //  slot.addEventListener("mousemove", mouseMove, true);
@@ -152,10 +148,7 @@ module EllianSkillbar {
             elem.click(function() {
                 console.log("button click");
                 ability.Perform();
-            });
-            elem.mousedown(function() {
-                console.log("button mouse down");
-            });
+            }); 
             elem.css('opacity', '1');
 
             $(slot).append(elem);
