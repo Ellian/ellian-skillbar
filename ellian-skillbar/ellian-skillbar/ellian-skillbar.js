@@ -41,6 +41,9 @@ var EllianSkillbar;
             mapAbilities[slot.id] = curPos;
             updateSkillbar();
         }
+        else {
+            dragSrcEl = null;
+        }
         return false;
     }
     function drag(slot) {
