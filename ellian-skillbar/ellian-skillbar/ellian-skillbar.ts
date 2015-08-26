@@ -18,6 +18,7 @@ module EllianSkillbar {
     /* Variables */
     var abilities = [];
     var mapAbilities = {};
+    var defaultOrderAbilities = {};
     var tooltip = null;
     var dragSrcEl = null;
 
@@ -70,7 +71,7 @@ module EllianSkillbar {
         drag(this);
         e.stopPropagation();
     }
-    function mouseUp(e) {         
+    function mouseUp(e) {
         console.log("mouseUp " + this.id);
         dragSrcEl.style.opacity = '1';
         drop(this);
@@ -84,7 +85,7 @@ module EllianSkillbar {
             }
         }
         return orderedAbilities;
-    }    
+    }
     function updateSkillbar() {
         console.log("updateSkillbar");
         $skillButtons.empty();
@@ -129,15 +130,15 @@ module EllianSkillbar {
             $(slot).attr('id', ability.id).appendTo($skillButtons).attr(
                 'draggable', 'true');
 
-           // slot.addEventListener("dragend", dragEnd, true);
+            // slot.addEventListener("dragend", dragEnd, true);
             slot.addEventListener("dragover", allowDrop, false);
             slot.addEventListener("mousedown", mouseDown, true);
-          //  slot.addEventListener("mousemove", mouseMove, true);
+            //  slot.addEventListener("mousemove", mouseMove, true);
             slot.addEventListener("mouseup", mouseUp, true);
-        //    slot.addEventListener("mouseover", mouseOver, true);
+            //    slot.addEventListener("mouseover", mouseOver, true);
 
             // Create button
-            var button = ability.MakeButton(i);
+            var button = ability.MakeButton(defaultOrderAbilities[ability.id]);
             var elem = button.rootElement.css({
                 left: (i * BUTTON_WIDTH + BUTTON_LEFT_OFFSET) + 'px',
                 top: '0'
@@ -150,8 +151,9 @@ module EllianSkillbar {
             elem.click(function() {
                 console.log("button click");
                 ability.Perform();
-            }); 
+            });
             elem.css('opacity', '1');
+            elem.children()[3].innerHTML = defaultOrderAbilities[ability.id] + ":" + elem.children()[3].innerHTML;
 
             $(slot).append(elem);
 
@@ -226,6 +228,10 @@ module EllianSkillbar {
         var req = cu.RequestAllAbilities(cuAPI.loginToken, characterID, abils => {
             abilities = abils;
 
+            abilities.forEach(function(abil, i) {
+                defaultOrderAbilities[abil.id] = i;
+            });
+            
             updateSkillbar();
         });
 
@@ -240,7 +246,7 @@ module EllianSkillbar {
                 abil.id = abil.id.toString(16);
                 abil.tooltip = abil.tooltip || abil.notes;
 
-                registerAbility(abil);
+                registerAbility(abil);                
             });
 
             cu.UpdateAllAbilities(abils);
