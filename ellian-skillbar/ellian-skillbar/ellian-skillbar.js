@@ -13,6 +13,7 @@ var EllianSkillbar;
     /* Variables */
     var abilities = [];
     var mapAbilities = {};
+    var defaultOrderAbilities = {};
     var tooltip = null;
     var dragSrcEl = null;
     /* Functions */
@@ -124,7 +125,7 @@ var EllianSkillbar;
             slot.addEventListener("mouseup", mouseUp, true);
             //    slot.addEventListener("mouseover", mouseOver, true);
             // Create button
-            var button = ability.MakeButton(i);
+            var button = ability.MakeButton(defaultOrderAbilities[ability.id]);
             var elem = button.rootElement.css({
                 left: (i * BUTTON_WIDTH + BUTTON_LEFT_OFFSET) + 'px',
                 top: '0'
@@ -138,6 +139,7 @@ var EllianSkillbar;
                 ability.Perform();
             });
             elem.css('opacity', '1');
+            elem.children()[3].innerHTML = defaultOrderAbilities[ability.id] + ":" + elem.children()[3].innerHTML;
             $(slot).append(elem);
             // $skillButtons.append(elem);
         });
@@ -192,6 +194,9 @@ var EllianSkillbar;
     function onCharacterIDChanged(characterID) {
         var req = cu.RequestAllAbilities(cuAPI.loginToken, characterID, function (abils) {
             abilities = abils;
+            abilities.forEach(function (abil, i) {
+                defaultOrderAbilities[abil.id] = i;
+            });
             updateSkillbar();
         });
         if (!req)
