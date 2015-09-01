@@ -1,0 +1,431 @@
+{
+  "arthurian": {
+    "fireMage": [
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Blade Attack",
+        "icon": "../images/skills/f-quickstrike.jpg",
+        "notes": "Delivers a blade attack.",
+        "rootComponentSlot": null
+      },
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Fire Dart",
+        "icon": "../images/skills/fire-Dart.jpg",
+        "notes": "Creates a projectile to burn the evildoers.",
+        "rootComponentSlot": null
+      },
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Fire Wave",
+        "icon": "../images/skills/fire-Wave.jpg",
+        "notes": "Creates a wave of fire around you.",
+        "rootComponentSlot": null
+      }
+    ],
+    "fighter": [
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Devastating Blow",
+        "icon": "../images/skills/f-quickstrike.jpg",
+        "notes": "Delivers a devastating attack.",
+        "rootComponentSlot": null
+      },
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Crippling Blow",
+        "icon": "../images/skills/f-LegSlash.jpg",
+        "notes": "Damages and slows your opponent.",
+        "rootComponentSlot": null
+      },
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Charge!",
+        "icon": "../images/skills/f-GiftOfSpeed.jpg",
+        "notes": "Gives a burst of speed.",
+        "rootComponentSlot": null
+      }
+    ],
+    "healer": [
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Mace Swing",
+        "icon": "../images/skills/f-quickstrike.jpg",
+        "notes": "Delivers a mace attack.",
+        "rootComponentSlot": null
+      },
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Healing Ball",
+        "icon": "../images/skills/h-HealingBall.jpg",
+        "notes": "Creates a projectile to heal allies.",
+        "rootComponentSlot": null
+      },
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Restoring Touch",
+        "icon": "../images/skills/h-HealingTouch.jpg",
+        "notes": "Heals a nearby ally over time.",
+        "rootComponentSlot": null
+      }
+    ]
+  },
+  "tdd": {
+    "earthMage": [
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Knife Attack",
+        "icon": "../images/skills/f-quickstrike.jpg",
+        "notes": "Delivers a knife attack.",
+        "rootComponentSlot": null
+      },
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Earth Dart",
+        "icon": "../images/skills/earth-Dart.jpg",
+        "notes": "Creates a projectile to destroy the despoilers.",
+        "rootComponentSlot": null
+      },
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Earth Wave",
+        "icon": "../images/skills/earth-Wave.jpg",
+        "notes": "Creates a wave of earth around you.",
+        "rootComponentSlot": null
+      }
+    ],
+    "fighter": [
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Devastating Blow",
+        "icon": "../images/skills/f-quickstrike.jpg",
+        "notes": "Delivers a devastating attack.",
+        "rootComponentSlot": null
+      },
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Crippling Blow",
+        "icon": "../images/skills/f-LegSlash.jpg",
+        "notes": "Damages and slows your opponent.",
+        "rootComponentSlot": null
+      },
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Charge!",
+        "icon": "../images/skills/f-GiftOfSpeed.jpg",
+        "notes": "Gives a burst of speed.",
+        "rootComponentSlot": null
+      }
+    ],
+    "healer": [
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Mace Swing",
+        "icon": "../images/skills/f-quickstrike.jpg",
+        "notes": "Delivers a mace attack.",
+        "rootComponentSlot": null
+      },
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Restoring Ball",
+        "icon": "../images/skills/h-HealingBall.jpg",
+        "notes": "Creates a projectile to heal allies over time.",
+        "rootComponentSlot": null
+      },
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Restoring Touch",
+        "icon": "../images/skills/h-HealingTouch.jpg",
+        "notes": "Heals a nearby ally over time.",
+        "rootComponentSlot": null
+      }
+    ]
+  },
+  "viking": {
+    "waterMage": [
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Sword Attack",
+        "icon": "../images/skills/f-quickstrike.jpg",
+        "notes": "Delivers a sword attack.",
+        "rootComponentSlot": null
+      },
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Water Dart",
+        "icon": "../images/skills/water-Dart.jpg",
+        "notes": "Creates a projectile to liquefy those in your way.",
+        "rootComponentSlot": null
+      },
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Water Wave",
+        "icon": "../images/skills/water-Wave.jpg",
+        "notes": "Creates a wave of water around you.",
+        "rootComponentSlot": null
+      }
+    ],
+    "fighter": [
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Devastating Blow",
+        "icon": "../images/skills/f-quickstrike.jpg",
+        "notes": "Delivers a devastating attack.",
+        "rootComponentSlot": null
+      },
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Crippling Blow",
+        "icon": "../images/skills/f-LegSlash.jpg",
+        "notes": "Damages and slows your opponent.",
+        "rootComponentSlot": null
+      },
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Charge!",
+        "icon": "../images/skills/f-GiftOfSpeed.jpg",
+        "notes": "Gives a burst of speed.",
+        "rootComponentSlot": null
+      }
+    ],
+    "healer": [
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Mace Swing",
+        "icon": "../images/skills/f-quickstrike.jpg",
+        "notes": "Delivers a mace attack.",
+        "rootComponentSlot": null
+      },
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Drain Ball",
+        "icon": "../images/skills/h-HealingBall.jpg",
+        "notes": "Creates a projectile to harm an enemy and heal an ally.",
+        "rootComponentSlot": null
+      },
+      {
+        "id": 0,
+        "characterID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "shardID": {
+          "isNull": true,
+          "isValid": false
+        },
+        "name": "Drain Touch",
+        "icon": "../images/skills/h-HealingTouch.jpg",
+        "notes": "Harms an enemy and heals an ally.",
+        "rootComponentSlot": null
+      }
+    ]
+  }
+}
