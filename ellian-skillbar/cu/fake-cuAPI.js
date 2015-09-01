@@ -30,18 +30,45 @@ var CUFakeGameAPI = (function () {
         this._buildingMode = false;
         // simulate character/player data
         this._character = {
-            id: "3goL1PEefVFg4Ag5CH4tCB", name: "ellian", race: undefined, hpTouched: Date.now(), hp: 100, maxHP: 100, staminaTouched: Date.now(), stamina: 0, maxStamina: 100
+            id: "3goL1PEefVFg4Ag5CH4tCB",
+            name: "ellian",
+            race: undefined,
+            hpTouched: Date.now(),
+            hp: 100,
+            maxHP: 100,
+            staminaTouched: Date.now(),
+            stamina: 0,
+            maxStamina: 100
         };
         this._target = {
-            name: undefined, race: undefined, hpTouched: Date.now(), hp: 100, maxHP: 100, staminaTouched: Date.now(), stamina: 0, maxStamina: 100
+            name: undefined,
+            race: undefined,
+            hpTouched: Date.now(),
+            hp: 100,
+            maxHP: 100,
+            staminaTouched: Date.now(),
+            stamina: 0,
+            maxStamina: 100
         };
         this._friendly = {
-            name: undefined, race: undefined, hpTouched: Date.now(), hp: 100, maxHP: 100, staminaTouched: Date.now(), stamina: 0, maxStamina: 100
+            name: undefined,
+            race: undefined,
+            hpTouched: Date.now(),
+            hp: 100,
+            maxHP: 100,
+            staminaTouched: Date.now(),
+            stamina: 0,
+            maxStamina: 100
         };
         this._init();
     }
     CUFakeGameAPI.prototype.rand = function (n) {
         return (Math.random() * n) | 0;
+    };
+    // ellian
+    CUFakeGameAPI.prototype.Listen = function (event) {
+    };
+    CUFakeGameAPI.prototype.OnEvent = function (callback) {
     };
     CUFakeGameAPI.prototype._ev = function (name, c) {
         var a = this._events[name] || [];
@@ -231,8 +258,10 @@ var CUFakeGameAPI = (function () {
         // Resource channel used to communicate with the patcher
         get: function () {
             switch (this._clientType) {
-                case "internal": return 4;
-                case "alpha": return 10;
+                case "internal":
+                    return 4;
+                case "alpha":
+                    return 10;
             }
             return;
         },
@@ -275,12 +304,17 @@ var CUFakeGameAPI = (function () {
         enumerable: true,
         configurable: true
     });
+    CUFakeGameAPI.prototype.PlaySoundEvent = function (id) {
+    };
     // Open another UI.  Limitation in fake-cuAPI is that the UI must follow
     // a standard layout and it doesn't currentl support the .ui file coordinates
     CUFakeGameAPI.prototype.OpenUI = function (name) {
         if (name.substr(-3) == ".ui")
             name = name.substr(0, name.length - 3);
-        this._openUIs[name] = { window: window.open("../" + name + "/" + name + ".html", "_ui" + name, "", true), visible: true };
+        this._openUIs[name] = {
+            window: window.open("../" + name + "/" + name + "-local.html", "_ui" + name, "", true),
+            visible: true
+        };
     };
     CUFakeGameAPI.prototype.CloseUI = function (name) {
         var ui = this._openUIs[name];
@@ -291,9 +325,11 @@ var CUFakeGameAPI = (function () {
     };
     CUFakeGameAPI.prototype.HideUI = function (name) {
         var ui = this._openUIs[name];
-        ui.size = { w: ui.window.innerWidth, h: ui.window.innerHeight };
-        ui.window.resizeTo(0, 0);
-        ui.false = true;
+        if (ui != undefined) {
+            ui.size = { w: ui.window.innerWidth, h: ui.window.innerHeight };
+            ui.window.resizeTo(0, 0);
+            ui.visible = false;
+        }
     };
     CUFakeGameAPI.prototype.ShowUI = function (name) {
         var ui = this._openUIs[name];
@@ -309,14 +345,23 @@ var CUFakeGameAPI = (function () {
             cuAPI.ShowUI(name);
         }
     };
-    CUFakeGameAPI.prototype.RequestInputOwnership = function () { };
-    CUFakeGameAPI.prototype.ReleaseInputOwnership = function () { };
-    CUFakeGameAPI.prototype.Quit = function () { };
-    CUFakeGameAPI.prototype.CrashTheGame = function () { alert('The game has crashed'); };
+    CUFakeGameAPI.prototype.RequestInputOwnership = function () {
+    };
+    CUFakeGameAPI.prototype.ReleaseInputOwnership = function () {
+    };
+    CUFakeGameAPI.prototype.Quit = function () {
+    };
+    CUFakeGameAPI.prototype.CrashTheGame = function () {
+        alert('The game has crashed');
+    };
     CUFakeGameAPI.prototype.OnUpdateNameplate = function (c) {
         this._ev("OnUpdateNameplate", c);
     };
     /* Abilities */
+    CUFakeGameAPI.prototype.OnSyncComponents = function () {
+    };
+    CUFakeGameAPI.prototype.OnShowAbility = function (callback) {
+    };
     CUFakeGameAPI.prototype.OnAbilityNumbersChanged = function (callback) {
     };
     CUFakeGameAPI.prototype.Attack = function (abilityID) {
@@ -329,22 +374,35 @@ var CUFakeGameAPI = (function () {
     CUFakeGameAPI.prototype.OnAbilityActive = function (c) {
         return this._ev("OnAbilityActive", c);
     };
-    CUFakeGameAPI.prototype.CancelOnAbilityActive = function (c) { };
-    CUFakeGameAPI.prototype.OnAbilityError = function (c) { };
-    CUFakeGameAPI.prototype.OnAbilityCreated = function (callback) { };
-    CUFakeGameAPI.prototype.OnAbilityDeleted = function (callback) { };
-    CUFakeGameAPI.prototype.RegisterAbility = function (abilityID, primaryBaseComponentID, secondaryBaseComponentID) { };
+    CUFakeGameAPI.prototype.CancelOnAbilityActive = function (c) {
+    };
+    CUFakeGameAPI.prototype.OnAbilityError = function (c) {
+    };
+    CUFakeGameAPI.prototype.OnAbilityCreated = function (callback) {
+    };
+    CUFakeGameAPI.prototype.OnAbilityDeleted = function (callback) {
+    };
+    CUFakeGameAPI.prototype.RegisterAbility = function (abilityID, primaryBaseComponentID, secondaryBaseComponentID) {
+    };
     /* Items */
-    CUFakeGameAPI.prototype.GetItem = function (itemID) { };
-    CUFakeGameAPI.prototype.OnGetItem = function (callback) { };
-    CUFakeGameAPI.prototype.OnItemEquipped = function (callback) { };
-    CUFakeGameAPI.prototype.OnItemUnequipped = function (callback) { };
+    CUFakeGameAPI.prototype.GetItem = function (itemID) {
+    };
+    CUFakeGameAPI.prototype.OnGetItem = function (callback) {
+    };
+    CUFakeGameAPI.prototype.OnItemEquipped = function (callback) {
+    };
+    CUFakeGameAPI.prototype.OnItemUnequipped = function (callback) {
+    };
     /* Equipped Gear */
-    CUFakeGameAPI.prototype.OnEquippedGearItemIDsChanged = function (callback) { };
-    CUFakeGameAPI.prototype.UnequipItem = function (itemID) { };
+    CUFakeGameAPI.prototype.OnEquippedGearItemIDsChanged = function (callback) {
+    };
+    CUFakeGameAPI.prototype.UnequipItem = function (itemID) {
+    };
     /* Inventory */
-    CUFakeGameAPI.prototype.OnInventoryItemIDsChanged = function (callback) { };
-    CUFakeGameAPI.prototype.EquipItem = function (itemID) { };
+    CUFakeGameAPI.prototype.OnInventoryItemIDsChanged = function (callback) {
+    };
+    CUFakeGameAPI.prototype.EquipItem = function (itemID) {
+    };
     /* Config */
     CUFakeGameAPI.prototype.OnReceiveConfigVars = function (c) {
         console.log("OnReceiveConfigVars");
@@ -354,18 +412,20 @@ var CUFakeGameAPI = (function () {
         console.log("OnReceiveConfigVar");
         this._ev("OnReceiveConfigVar", c);
     };
-    CUFakeGameAPI.prototype.OnConfigVarChanged = function (c) { 
-    	this._ev("OnConfigVarChanged", c);
+    CUFakeGameAPI.prototype.OnConfigVarChanged = function (c) {
     };
-    CUFakeGameAPI.prototype.SaveConfigChanges = function () { };
-    CUFakeGameAPI.prototype.OnSavedConfigChanges = function (c) { };
-    CUFakeGameAPI.prototype.RestoreConfigDefaults = function (tag) { };
+    CUFakeGameAPI.prototype.SaveConfigChanges = function () {
+    };
+    CUFakeGameAPI.prototype.OnSavedConfigChanges = function (c) {
+    };
+    CUFakeGameAPI.prototype.RestoreConfigDefaults = function (tag) {
+    };
     CUFakeGameAPI.prototype.ChangeConfigVar = function (variable, value) {
-    	this._evf("OnConfigVarChanged", [variable, value]);
-    	
     };
-    CUFakeGameAPI.prototype.CancelChangeConfig = function (variable) { };
-    CUFakeGameAPI.prototype.CancelAllConfigChanges = function (tag) { };
+    CUFakeGameAPI.prototype.CancelChangeConfig = function (variable) {
+    };
+    CUFakeGameAPI.prototype.CancelAllConfigChanges = function (tag) {
+    };
     CUFakeGameAPI.prototype.GetConfigVars = function (tag) {
         console.log(tag);
     };
@@ -405,10 +465,10 @@ var CUFakeGameAPI = (function () {
         }
     };
     /**
-    * Register for character name change callbacks.  If the characters name is available
-    * at the time this method is called, an event is fired immediately.
-    * @prams callback Function to be called whenever the character name changes.
-    */
+     * Register for character name change callbacks.  If the characters name is available
+     * at the time this method is called, an event is fired immediately.
+     * @prams callback Function to be called whenever the character name changes.
+     */
     CUFakeGameAPI.prototype.OnCharacterNameChanged = function (callback) {
         var id = "OnCharacterNameChanged";
         this._ev(id, callback);
@@ -417,26 +477,27 @@ var CUFakeGameAPI = (function () {
         }
     };
     /**
-    * Register for character health change callbacks.  This event is fired immediately.
-    * @prams callback Function to be called whenever the character health changes.
-    *   Both the characters current and maximum health are provided.
-    */
+     * Register for character health change callbacks.  This event is fired immediately.
+     * @prams callback Function to be called whenever the character health changes.
+     *   Both the characters current and maximum health are provided.
+     */
     CUFakeGameAPI.prototype.OnCharacterHealthChanged = function (callback) {
         var id = "OnCharacterHealthChanged";
         this._ev(id, callback);
         this._evf(id, [this._character.hp, this._character.maxHP]);
     };
     /**
-    * Register for character stamina change callbacks.  This event if fired immediately.
-    * @prams callback Function to be called whenever the character stamina changes.
-    *   Both the characters current and maximum stamina are provided.
-    */
+     * Register for character stamina change callbacks.  This event if fired immediately.
+     * @prams callback Function to be called whenever the character stamina changes.
+     *   Both the characters current and maximum stamina are provided.
+     */
     CUFakeGameAPI.prototype.OnCharacterStaminaChanged = function (callback) {
         var id = "OnCharacterStaminaChanged";
         this._ev(id, callback);
         this._evf(id, [this._character.stamina, this._character.maxStamina]);
     };
-    CUFakeGameAPI.prototype.OnCharacterEffectsChanged = function (c) { };
+    CUFakeGameAPI.prototype.OnCharacterEffectsChanged = function (c) {
+    };
     /* Enemy Target */
     CUFakeGameAPI.prototype.OnEnemyTargetNameChanged = function (callback) {
         var id = "OnTargetNameChanged";
@@ -455,7 +516,8 @@ var CUFakeGameAPI = (function () {
         this._ev(id, callback);
         this._evf(id, [this._target.stamina, this._target.maxStamina]);
     };
-    CUFakeGameAPI.prototype.OnEnemyTargetEffectsChanged = function (callback) { };
+    CUFakeGameAPI.prototype.OnEnemyTargetEffectsChanged = function (callback) {
+    };
     /* Friendly Target */
     CUFakeGameAPI.prototype.OnFriendlyTargetNameChanged = function (callback) {
         var id = "OnFriendlytTargetNameChanged";
@@ -474,7 +536,8 @@ var CUFakeGameAPI = (function () {
         this._ev(id, callback);
         this._evf(id, [this._friendly.stamina, this._friendly.maxStamina]);
     };
-    CUFakeGameAPI.prototype.OnFriendlyTargetEffectsChanged = function (callback) { };
+    CUFakeGameAPI.prototype.OnFriendlyTargetEffectsChanged = function (callback) {
+    };
     /* Chat */
     CUFakeGameAPI.prototype.OnBeginChat = function (c) {
         this._ev("OnBeginChat", c);
@@ -482,39 +545,56 @@ var CUFakeGameAPI = (function () {
     CUFakeGameAPI.prototype.OnChat = function (c) {
         this._ev("OnChat", c);
     };
-    CUFakeGameAPI.prototype.SendChat = function (type, to, body) { };
-    CUFakeGameAPI.prototype.JoinMUC = function (room) { };
-    CUFakeGameAPI.prototype.LeaveMUC = function (room) { };
-    CUFakeGameAPI.prototype.Stuck = function () { };
-    CUFakeGameAPI.prototype.ChangeZone = function (zoneID) { };
+    CUFakeGameAPI.prototype.SendChat = function (type, to, body) {
+    };
+    CUFakeGameAPI.prototype.JoinMUC = function (room) {
+    };
+    CUFakeGameAPI.prototype.LeaveMUC = function (room) {
+    };
+    CUFakeGameAPI.prototype.Stuck = function () {
+    };
+    CUFakeGameAPI.prototype.ChangeZone = function (zoneID) {
+    };
     Object.defineProperty(CUFakeGameAPI.prototype, "fps", {
         /* Stats */
-        get: function () { return 60; },
+        get: function () {
+            return 60;
+        },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(CUFakeGameAPI.prototype, "frameTime", {
-        get: function () { return 16.7; },
+        get: function () {
+            return 16.7;
+        },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(CUFakeGameAPI.prototype, "netstats_udpPackets", {
-        get: function () { return 100; },
+        get: function () {
+            return 100;
+        },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(CUFakeGameAPI.prototype, "netstats_udpBytes", {
-        get: function () { return 1000; },
+        get: function () {
+            return 1000;
+        },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(CUFakeGameAPI.prototype, "netstats_tcpMessages", {
-        get: function () { return 10; },
+        get: function () {
+            return 10;
+        },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(CUFakeGameAPI.prototype, "netstats_tcpBytes", {
-        get: function () { return 3000; },
+        get: function () {
+            return 3000;
+        },
         enumerable: true,
         configurable: true
     });
@@ -610,13 +690,19 @@ var CUFakeGameAPI = (function () {
         configurable: true
     });
     /* Console */
-    CUFakeGameAPI.prototype.OnConsoleText = function (c) { };
-    CUFakeGameAPI.prototype.ConsoleCommand = function (body) { };
+    CUFakeGameAPI.prototype.OnConsoleText = function (c) {
+    };
+    CUFakeGameAPI.prototype.ConsoleCommand = function (body) {
+    };
     /* Login */
-    CUFakeGameAPI.prototype.Connect = function (host, port, character, webAPIHost) { };
+    CUFakeGameAPI.prototype.Connect = function (host, port, character, webAPIHost) {
+    };
     return CUFakeGameAPI;
 })();
 if (typeof cuAPI === "undefined") {
     window["cuAPI"] = new CUFakeGameAPI();
-    window.addEventListener("load", function () { document.body.style.background = '#808080 url("../cu/fake-cuAPI.jpg") no-repeat fixed center'; });
+    window.addEventListener("load", function () {
+        document.body.style.background = '#808080 url("../cu/fake-cuAPI.jpg") no-repeat fixed center';
+    });
 }
+//# sourceMappingURL=fake-cuAPI.js.map

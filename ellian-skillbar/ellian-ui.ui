@@ -1,0 +1,12 @@
+{
+    "name": "ellian-ui",
+    "mainFile": "ellian-ui/ellian-ui.html",
+    "rect": {
+        "left": 1380,
+        "top": 670,
+        "right": 1580,
+        "bottom": 900
+    },
+    "handlesInput": true,
+    "layer": 1
+}

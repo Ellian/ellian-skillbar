@@ -6,7 +6,7 @@
 
 class CUFakeGameAPI {
 
-    private rand(n): number {
+    private rand(n):number {
         return (Math.random() * n) | 0;
     }
 
@@ -28,44 +28,74 @@ class CUFakeGameAPI {
         StormRiderV: 14
     }
 
-    private _initialised: boolean = false;
-    private _events: any = {};
-    private _token: string = "x4rNIR6YUCK06nCjOXJxP0";
-    private _serverStart: number = Date.now();
-    private _clientType: string = "internal";
-    private _openUIs: any = {};
-    private _buildingMode: boolean = false;
+    private _initialised:boolean = false;
+    private _events:any = {};
+    private _token:string = "x4rNIR6YUCK06nCjOXJxP0";
+    private _serverStart:number = Date.now();
+    private _clientType:string = "internal";
+    private _openUIs:any = {};
+    private _buildingMode:boolean = false;
+
+    // ellian
+    Listen(event:string):void {
+    }
+
+    OnEvent(callback:(event:string, ...args:any[]) => void):void {
+    }
 
     // simulate character/player data
     private _character = {
-        id: "3goL1PEefVFg4Ag5CH4tCB", name: "ellian", race: undefined, hpTouched: Date.now(), hp: 100, maxHP: 100, staminaTouched: Date.now(), stamina: 0, maxStamina: 100
+        id: "3goL1PEefVFg4Ag5CH4tCB",
+        name: "ellian",
+        race: undefined,
+        hpTouched: Date.now(),
+        hp: 100,
+        maxHP: 100,
+        staminaTouched: Date.now(),
+        stamina: 0,
+        maxStamina: 100
     };
     private _target = {
-        name: undefined, race: undefined, hpTouched: Date.now(), hp: 100, maxHP: 100, staminaTouched: Date.now(), stamina: 0, maxStamina: 100
+        name: undefined,
+        race: undefined,
+        hpTouched: Date.now(),
+        hp: 100,
+        maxHP: 100,
+        staminaTouched: Date.now(),
+        stamina: 0,
+        maxStamina: 100
     };
     private _friendly = {
-        name: undefined, race: undefined, hpTouched: Date.now(), hp: 100, maxHP: 100, staminaTouched: Date.now(), stamina: 0, maxStamina: 100
+        name: undefined,
+        race: undefined,
+        hpTouched: Date.now(),
+        hp: 100,
+        maxHP: 100,
+        staminaTouched: Date.now(),
+        stamina: 0,
+        maxStamina: 100
     };
 
-    private _ev(name: string, c: any): number {
+    private _ev(name:string, c:any):number {
         var a = this._events[name] || [];
         this._events[name] = a;
         return a.push(c);
     }
 
-    private _evc(name: string, c: number): void {
+    private _evc(name:string, c:number):void {
         var a = this._events[name];
         if (a) {
             a[c] = null;
         }
     }
-    private _evf(name: string, args: any): void {
+
+    private _evf(name:string, args:any):void {
         var a = this._events[name];
         if (a) {
             for (var i = 0; i < a.length; i++) {
                 if (a[i]) {
-                    (function(callback) {
-                        setTimeout(function() {
+                    (function (callback) {
+                        setTimeout(function () {
                             console.log(name + ": " + JSON.stringify(args));
                             callback.apply(window, args);
                         }, 0);
@@ -79,35 +109,35 @@ class CUFakeGameAPI {
         this._init();
     }
 
-    private _init(): number {
-        var cuAPI: CUFakeGameAPI = this;
+    private _init():number {
+        var cuAPI:CUFakeGameAPI = this;
 
-        function _randomCharacter(): string {
+        function _randomCharacter():string {
             return ["Player1"][cuAPI.rand(1)];
         }
 
-        function _randomPlayer(): string {
+        function _randomPlayer():string {
             return ["CSE_Mark", "CSE_JB", "CSE_Brian", "CSE_Bryce", "DonnieT", "Meddyck", "CSE_Jenesee", "Mehuge", "CSE_Cory", "CSE_Tyler"][cuAPI.rand(10)];
         }
 
-        function _changeCharacter(tick: number, _player: any) {
+        function _changeCharacter(tick:number, _player:any) {
             _player.name = _randomCharacter();
             cuAPI._evf("OnCharacterNameChanged", [_player.name]);
             _player.race = cuAPI.rand(15) | 0;
             cuAPI._evf("OnCharacterRaceChanged", [_player.race]);
         }
 
-        function _changeTarget(tick: number, _player: any) {
+        function _changeTarget(tick:number, _player:any) {
             _player.name = _randomPlayer();
             cuAPI._evf("OnTargetNameChanged", [_player.name]);
         }
 
-        function _changeFriendlyTarget(tick: number, _player: any) {
+        function _changeFriendlyTarget(tick:number, _player:any) {
             _player.name = _randomPlayer();
             cuAPI._evf("OnFriendlyTargetNameChanged", [_player.name]);
         }
 
-        function _playerTick(tick: number, cls: string, _player: any) {
+        function _playerTick(tick:number, cls:string, _player:any) {
             // Fire character name change if not currently got a name
             if (!_player.name) {
                 if (_player === cuAPI._character) {
@@ -177,19 +207,19 @@ class CUFakeGameAPI {
             }
         }
 
-        function _nameplateTick(tick: number) {
+        function _nameplateTick(tick:number) {
             if (tick % 5 === 0) {
-                var cell: number = cuAPI.rand(8);
-                var colorMod: number = cuAPI.rand(4) + 1;
-                var name: string = _randomCharacter();
-                var gtag: string = cuAPI.rand(10) < 1 ? "[CSE]" : "";
-                var title: string = "Player Title";
+                var cell:number = cuAPI.rand(8);
+                var colorMod:number = cuAPI.rand(4) + 1;
+                var name:string = _randomCharacter();
+                var gtag:string = cuAPI.rand(10) < 1 ? "[CSE]" : "";
+                var title:string = "Player Title";
                 cuAPI._evf("OnUpdateNameplate", [cell, colorMod, name, gtag, title]);
             }
         }
 
         function _tick() {
-            var tick: number = Date.now();
+            var tick:number = Date.now();
             // emulation tick, here we will simulate the live environment (as much as we can) in the UI.  
             // We will adjust HP, targets etc.
             _playerTick(tick, "Character", cuAPI._character);
@@ -197,6 +227,7 @@ class CUFakeGameAPI {
             _playerTick(tick, "FriendlyTarget", cuAPI._friendly);
             _nameplateTick(tick);
         }
+
         setInterval(_tick, 100);
         return setTimeout(() => {
             cuAPI._initialised = true;
@@ -212,17 +243,19 @@ class CUFakeGameAPI {
     // execution. Anything you need to do in setup should be attached to
     // cu.OnInitialized(), which will be called after the page is loaded
     // and this is fully set up.
-    get initialised(): boolean {
+    get initialised():boolean {
         return this._initialised;
     }
-    OnInitialized(c: () => void): number {
-        var handle: number = this._ev("OnInitialized", c);
+
+    OnInitialized(c:() => void):number {
+        var handle:number = this._ev("OnInitialized", c);
         if (this.initialised) {
             this._evf("OnInitialized", []);
         }
         return handle;
     }
-    CancelOnInitialized(c: number) {
+
+    CancelOnInitialized(c:number) {
         this._evc("OnInitialized", c);
     }
 
@@ -232,37 +265,40 @@ class CUFakeGameAPI {
     /* Shared */
 
     // Called by the client when a connection to a server is established
-    OnServerConnected(c: (isConnected: boolean) => void): number {
+    OnServerConnected(c:(isConnected:boolean) => void):number {
         return this._ev("OnServerConnected", c);
     }
-    CancelOnServerConnected(c: number): void {
+
+    CancelOnServerConnected(c:number):void {
         this._evc("OnServerConnected", c);
     }
 
     // Returns the users login token provided by the patcher.  Under fake-cuAPI conditions we wont have
     // one of this, it is up to the user to determine and proved a valid one (by for example looking
     // at the command line of the main client exe spawned by the patcher)
-    get loginToken(): string {
+    get loginToken():string {
         if (!this._token) this._token = window.prompt("Login Token?");
         return this._token;
     }
 
     // Resource channel used to communicate with the patcher
-    get patchResourceChannel(): number {
+    get patchResourceChannel():number {
         switch (this._clientType) {
-            case "internal": return 4;
-            case "alpha": return 10;
+            case "internal":
+                return 4;
+            case "alpha":
+                return 10;
         }
         return;
     }
 
     // something to do with the network
-    get pktHash(): string {
+    get pktHash():string {
         return "yOP5gKif0zt2u4FoZ8xQ27";
     }
 
     // The URL for the REST API for this server
-    get serverURL(): string {
+    get serverURL():string {
         switch (this._clientType) {
             case "alpha":
                 return "http://wyrmling.camelotunchained.com:8000/api/";
@@ -271,45 +307,53 @@ class CUFakeGameAPI {
     }
 
     // Current server time seconds
-    get serverTime(): number {
+    get serverTime():number {
         return (Date.now() - this._serverStart) / 1000;
     }
 
     // Returns true if vsync is on, otherwise false.
-    get vsync(): boolean {
+    get vsync():boolean {
         return true;
+    }
+
+    PlaySoundEvent(id:number):void {
     }
 
     // Open another UI.  Limitation in fake-cuAPI is that the UI must follow
     // a standard layout and it doesn't currentl support the .ui file coordinates
-    OpenUI(name: string): void {
+    OpenUI(name:string):void {
         if (name.substr(-3) == ".ui") name = name.substr(0, name.length - 3);
-        this._openUIs[name] = { window: window.open("../" + name + "/" + name + ".html", "_ui" + name, "", true), visible: true };
+        this._openUIs[name] = {
+            window: window.open("../" + name + "/" + name + "-local.html", "_ui" + name, "", true),
+            visible: true
+        };
     }
 
-    CloseUI(name: string): void {
-        var ui: any = this._openUIs[name];
+    CloseUI(name:string):void {
+        var ui:any = this._openUIs[name];
         if (ui) {
             ui.window.close();
             this._openUIs[name] = null;
         }
     }
 
-    HideUI(name: string): void {
-        var ui: any = this._openUIs[name];
-        ui.size = { w: ui.window.innerWidth, h: ui.window.innerHeight };
-        ui.window.resizeTo(0, 0);
-        ui.false = true;
+    HideUI(name:string):void {
+        var ui:any = this._openUIs[name];
+        if (ui != undefined) {
+            ui.size = {w: ui.window.innerWidth, h: ui.window.innerHeight};
+            ui.window.resizeTo(0, 0);
+            ui.visible = false;
+        }
     }
 
-    ShowUI(name: string): void {
-        var ui: any = this._openUIs[name];
+    ShowUI(name:string):void {
+        var ui:any = this._openUIs[name];
         ui.window.resizeTo(ui.size.w, ui.size.h);
         ui.visible = true;
     }
 
-    ToggleUIVisibility(name: string): void {
-        var ui: any = this._openUIs[name];
+    ToggleUIVisibility(name:string):void {
+        var ui:any = this._openUIs[name];
         if (ui.visible) {
             cuAPI.HideUI(name);
         } else {
@@ -317,114 +361,167 @@ class CUFakeGameAPI {
         }
     }
 
-    RequestInputOwnership(): void { }
-    ReleaseInputOwnership(): void { }
-    Quit(): void { }
-    CrashTheGame(): void { alert('The game has crashed'); }
-    OnUpdateNameplate(c: (cell: number, colorMod: number, name: string, gtag: string, title: string) => void): void {
+    RequestInputOwnership():void {
+    }
+
+    ReleaseInputOwnership():void {
+    }
+
+    Quit():void {
+    }
+
+    CrashTheGame():void {
+        alert('The game has crashed');
+    }
+
+    OnUpdateNameplate(c:(cell:number, colorMod:number, name:string, gtag:string, title:string) => void):void {
         this._ev("OnUpdateNameplate", c);
     }
 
     /* Abilities */
 
-    OnAbilityNumbersChanged(callback: (abilityNumbers: string[]) => void): void {
+    OnSyncComponents():void {
+
     }
 
-    Attack(abilityID: string): void {
+    OnShowAbility(callback:(abilityID:string) => void):void {
     }
 
-    OnAbilityCooldown(c: (cooldownID: number, timeStarted: number, duration: number) => void): number {
+    OnAbilityNumbersChanged(callback:(abilityNumbers:string[]) => void):void {
+    }
+
+    Attack(abilityID:string):void {
+    }
+
+    OnAbilityCooldown(c:(cooldownID:number, timeStarted:number, duration:number) => void):number {
         return 0;
     }
-    CancelOnAbilityCooldown(c: number): void {
+
+    CancelOnAbilityCooldown(c:number):void {
     }
 
-    OnAbilityActive(c: (currentAbility: string, timeStarted: number, timeTriggered: number, queuedAbility: string) => void): number {
+    OnAbilityActive(c:(currentAbility:string, timeStarted:number, timeTriggered:number, queuedAbility:string) => void):number {
         return this._ev("OnAbilityActive", c);
     }
-    CancelOnAbilityActive(c: number): void { }
 
-    OnAbilityError(c: (message: string) => void): void { }
+    CancelOnAbilityActive(c:number):void {
+    }
 
-    OnAbilityCreated(callback: (abilityID: string, ability: string) => void): void { }
+    OnAbilityError(c:(message:string) => void):void {
+    }
 
-    OnAbilityDeleted(callback: (abilityID: string) => void): void { }
+    OnAbilityCreated(callback:(abilityID:string, ability:string) => void):void {
+    }
 
-    RegisterAbility(abilityID: string, primaryBaseComponentID: string, secondaryBaseComponentID: string): void { }
+    OnAbilityDeleted(callback:(abilityID:string) => void):void {
+    }
+
+    RegisterAbility(abilityID:string, primaryBaseComponentID:string, secondaryBaseComponentID:string):void {
+    }
 
     /* Items */
 
-    GetItem(itemID: string): void { }
-    OnGetItem(callback: (itemID: string, data: string) => void): void { }
+    GetItem(itemID:string):void {
+    }
 
-    OnItemEquipped(callback: (itemID: string) => void): void { }
-    OnItemUnequipped(callback: (itemID: string) => void): void { }
+    OnGetItem(callback:(itemID:string, data:string) => void):void {
+    }
+
+    OnItemEquipped(callback:(itemID:string) => void):void {
+    }
+
+    OnItemUnequipped(callback:(itemID:string) => void):void {
+    }
 
     /* Equipped Gear */
 
-    OnEquippedGearItemIDsChanged(callback: (gearItemIDs: string[]) => void): void { }
+    OnEquippedGearItemIDsChanged(callback:(gearItemIDs:string[]) => void):void {
+    }
 
-    UnequipItem(itemID: string): void { }
+    UnequipItem(itemID:string):void {
+    }
 
     /* Inventory */
 
-    OnInventoryItemIDsChanged(callback: (inventoryItemIDs: string[]) => void): void { }
+    OnInventoryItemIDsChanged(callback:(inventoryItemIDs:string[]) => void):void {
+    }
 
-    EquipItem(itemID: string): void { }
+    EquipItem(itemID:string):void {
+    }
 
     /* Config */
 
-    OnReceiveConfigVars(c: (configs: string) => void): void {
-        console.log("OnReceiveConfigVars");        
-        this._ev("OnReceiveConfigVars", c);         
+    OnReceiveConfigVars(c:(configs:string) => void):void {
+        console.log("OnReceiveConfigVars");
+        this._ev("OnReceiveConfigVars", c);
     }
-    OnReceiveConfigVar(c: (config: any) => void): void {
+
+    OnReceiveConfigVar(c:(config:any) => void):void {
         console.log("OnReceiveConfigVar");
-        this._ev("OnReceiveConfigVar", c);    
+        this._ev("OnReceiveConfigVar", c);
     }
-    OnConfigVarChanged(c: (isChangeSuccessful: boolean) => void): void { }
-    SaveConfigChanges(): void { }
-    OnSavedConfigChanges(c: () => void): void { }
-    RestoreConfigDefaults(tag: Tags): void { }
-    ChangeConfigVar(variable: string, value: string): void { }
-    CancelChangeConfig(variable: string): void { }
-    CancelAllConfigChanges(tag: Tags): void { }
-    GetConfigVars(tag: Tags): void { 
-        console.log(tag); 
+
+    OnConfigVarChanged(c:(isChangeSuccessful:boolean) => void):void {
     }
-    GetConfigVar(variable: string): void {
-       // console.log(variable);
-        this._evf("OnReceiveConfigVar", ["Z"]);        
+
+    SaveConfigChanges():void {
+    }
+
+    OnSavedConfigChanges(c:() => void):void {
+    }
+
+    RestoreConfigDefaults(tag:Tags):void {
+    }
+
+    ChangeConfigVar(variable:string, value:string):void {
+    }
+
+    CancelChangeConfig(variable:string):void {
+    }
+
+    CancelAllConfigChanges(tag:Tags):void {
+    }
+
+    GetConfigVars(tag:Tags):void {
+        console.log(tag);
+    }
+
+    GetConfigVar(variable:string):void {
+        // console.log(variable);
+        this._evf("OnReceiveConfigVar", ["Z"]);
     }
 
     /* Building */
-    OnBuildingModeChanged(c: (buildingMode: boolean) => void): void {
+    OnBuildingModeChanged(c:(buildingMode:boolean) => void):void {
         this._ev("OnBuildingModeChanged", c);
     }
-    ChangeBuildingMode(): void {
+
+    ChangeBuildingMode():void {
         this._buildingMode = !this._buildingMode;
         this._evf("OnBuildingModeChanged", [this._buildingMode]);
     }
 
     /* Announcement */
-    OnAnnouncement(c: (message: string, type: number) => void): void {
+    OnAnnouncement(c:(message:string, type:number) => void):void {
         this._ev("OnAnnouncement", c);
     }
 
     /* Character */
-    OnCharacterIDChanged(c: (id: string) => void): void {
+    OnCharacterIDChanged(c:(id:string) => void):void {
         //this._ev("OnCharacterIDChanged", c);
-        var id: string = "OnCharacterIDChanged";
+        var id:string = "OnCharacterIDChanged";
         this._ev(id, c);
         if (this._character.id !== undefined) {
             this._evf(id, [this._character.id]);
         }
     }
-    OnCharacterFactionChanged(c: (faction: number) => void): void {
+
+    OnCharacterFactionChanged(c:(faction:number) => void):void {
         this._ev("OnCharacterFactionChanged", c);
     }
-    OnCharacterRaceChanged(c: (race: number) => void): void {
-        var id: string = "OnCharacterRaceChanged";
+
+    OnCharacterRaceChanged(c:(race:number) => void):void {
+        var id:string = "OnCharacterRaceChanged";
         this._ev(id, c);
         if (this._character.race !== undefined) {
             this._evf(id, [this._character.name]);
@@ -432,168 +529,215 @@ class CUFakeGameAPI {
     }
 
     /**
-    * Register for character name change callbacks.  If the characters name is available
-    * at the time this method is called, an event is fired immediately.
-    * @prams callback Function to be called whenever the character name changes.
-    */
-    OnCharacterNameChanged(callback: (name: string) => void): void {
-        var id: string = "OnCharacterNameChanged";
+     * Register for character name change callbacks.  If the characters name is available
+     * at the time this method is called, an event is fired immediately.
+     * @prams callback Function to be called whenever the character name changes.
+     */
+    OnCharacterNameChanged(callback:(name:string) => void):void {
+        var id:string = "OnCharacterNameChanged";
         this._ev(id, callback);
         if (this._character.name !== undefined) {
             this._evf(id, [this._character.name]);
         }
     }
+
     /**
-    * Register for character health change callbacks.  This event is fired immediately.
-    * @prams callback Function to be called whenever the character health changes.  
-    *   Both the characters current and maximum health are provided.
-    */
-    OnCharacterHealthChanged(callback: (health: number, maxHealth: number) => void): void {
-        var id: string = "OnCharacterHealthChanged";
+     * Register for character health change callbacks.  This event is fired immediately.
+     * @prams callback Function to be called whenever the character health changes.
+     *   Both the characters current and maximum health are provided.
+     */
+    OnCharacterHealthChanged(callback:(health:number, maxHealth:number) => void):void {
+        var id:string = "OnCharacterHealthChanged";
         this._ev(id, callback);
         this._evf(id, [this._character.hp, this._character.maxHP]);
     }
+
     /**
-    * Register for character stamina change callbacks.  This event if fired immediately.
-    * @prams callback Function to be called whenever the character stamina changes.  
-    *   Both the characters current and maximum stamina are provided.
-    */
-    OnCharacterStaminaChanged(callback: (stamina: number, maxStamina: number) => void): void {
-        var id: string = "OnCharacterStaminaChanged";
+     * Register for character stamina change callbacks.  This event if fired immediately.
+     * @prams callback Function to be called whenever the character stamina changes.
+     *   Both the characters current and maximum stamina are provided.
+     */
+    OnCharacterStaminaChanged(callback:(stamina:number, maxStamina:number) => void):void {
+        var id:string = "OnCharacterStaminaChanged";
         this._ev(id, callback);
         this._evf(id, [this._character.stamina, this._character.maxStamina]);
     }
-    OnCharacterEffectsChanged(c: (effects: string) => void): void { }
+
+    OnCharacterEffectsChanged(c:(effects:string) => void):void {
+    }
 
     /* Enemy Target */
 
-    OnEnemyTargetNameChanged(callback: (name: string) => void): void {
-        var id: string = "OnTargetNameChanged";
+    OnEnemyTargetNameChanged(callback:(name:string) => void):void {
+        var id:string = "OnTargetNameChanged";
         this._ev(id, callback);
         if (this._target.name !== undefined) {
             this._evf(id, [this._target.name]);
         }
     }
-    OnEnemyTargetHealthChanged(callback: (health: number, maxHealth: number) => void): void {
-        var id: string = "OnTargetHealthChanged";
+
+    OnEnemyTargetHealthChanged(callback:(health:number, maxHealth:number) => void):void {
+        var id:string = "OnTargetHealthChanged";
         this._ev(id, callback);
         this._evf(id, [this._target.hp, this._target.maxHP]);
     }
-    OnEnemyTargetStaminaChanged(callback: (stamina: number, maxStamina: number) => void): void {
-        var id: string = "OnTargetStaminaChanged";
+
+    OnEnemyTargetStaminaChanged(callback:(stamina:number, maxStamina:number) => void):void {
+        var id:string = "OnTargetStaminaChanged";
         this._ev(id, callback);
         this._evf(id, [this._target.stamina, this._target.maxStamina]);
     }
-    OnEnemyTargetEffectsChanged(callback: (effects: string) => void): void { }
+
+    OnEnemyTargetEffectsChanged(callback:(effects:string) => void):void {
+    }
 
     /* Friendly Target */
 
-    OnFriendlyTargetNameChanged(callback: (name: string) => void): void {
-        var id: string = "OnFriendlytTargetNameChanged";
+    OnFriendlyTargetNameChanged(callback:(name:string) => void):void {
+        var id:string = "OnFriendlytTargetNameChanged";
         this._ev(id, callback);
         if (this._friendly.name) {
             this._evf(id, [this._friendly.name]);
         }
     }
-    OnFriendlyTargetHealthChanged(callback: (health: number, maxHealth: number) => void): void {
-        var id: string = "OnFriendlyTargetHealthChanged";
+
+    OnFriendlyTargetHealthChanged(callback:(health:number, maxHealth:number) => void):void {
+        var id:string = "OnFriendlyTargetHealthChanged";
         this._ev(id, callback);
         this._evf(id, [this._friendly.hp, this._friendly.maxHP]);
     }
-    OnFriendlyTargetStaminaChanged(callback: (stamina: number, maxStamina: number) => void): void {
-        var id: string = "OnFriendlyTargetStaminaChanged";
+
+    OnFriendlyTargetStaminaChanged(callback:(stamina:number, maxStamina:number) => void):void {
+        var id:string = "OnFriendlyTargetStaminaChanged";
         this._ev(id, callback);
         this._evf(id, [this._friendly.stamina, this._friendly.maxStamina]);
     }
-    OnFriendlyTargetEffectsChanged(callback: (effects: string) => void): void { }
+
+    OnFriendlyTargetEffectsChanged(callback:(effects:string) => void):void {
+    }
 
     /* Chat */
 
-    OnBeginChat(c: (commandMode: number, text: string) => void): void {
+    OnBeginChat(c:(commandMode:number, text:string) => void):void {
         this._ev("OnBeginChat", c);
     }
-    OnChat(c: (type: number, from: string, body: string, nick: string, iscse: boolean) => void): void {
+
+    OnChat(c:(type:number, from:string, body:string, nick:string, iscse:boolean) => void):void {
         this._ev("OnChat", c);
     }
-    SendChat(type: number, to: string, body: string): void { }
-    JoinMUC(room: string): void { }
-    LeaveMUC(room: string): void { }
-    Stuck(): void { }
-    ChangeZone(zoneID: number): void { }
+
+    SendChat(type:number, to:string, body:string):void {
+    }
+
+    JoinMUC(room:string):void {
+    }
+
+    LeaveMUC(room:string):void {
+    }
+
+    Stuck():void {
+    }
+
+    ChangeZone(zoneID:number):void {
+    }
 
     /* Stats */
 
-    get fps(): number { return 60; }
-    get frameTime(): number { return 16.7; }
-    get netstats_udpPackets(): number { return 100; }
-    get netstats_udpBytes(): number { return 1000; }
-    get netstats_tcpMessages(): number { return 10; }
-    get netstats_tcpBytes(): number { return 3000; }
+    get fps():number {
+        return 60;
+    }
 
-    get netstats_players_updateBits(): number {
+    get frameTime():number {
+        return 16.7;
+    }
+
+    get netstats_udpPackets():number {
+        return 100;
+    }
+
+    get netstats_udpBytes():number {
+        return 1000;
+    }
+
+    get netstats_tcpMessages():number {
+        return 10;
+    }
+
+    get netstats_tcpBytes():number {
+        return 3000;
+    }
+
+    get netstats_players_updateBits():number {
         return 0;
     }
 
-    get netstats_players_updateCount(): number {
+    get netstats_players_updateCount():number {
         return 0;
     }
 
-    get netstats_players_newCount(): number {
+    get netstats_players_newCount():number {
         return 0;
     }
 
-    get netstats_players_newBits(): number {
+    get netstats_players_newBits():number {
         return 0;
     }
 
-    get netstats_lag(): number {
+    get netstats_lag():number {
         return 125;
     }
 
-    get particlesRenderedCount(): number {
+    get particlesRenderedCount():number {
         return this.rand(10000);
     }
 
-    get speed(): number {
+    get speed():number {
         return 0;               // stopped
     }
 
-    get locationX(): number {
+    get locationX():number {
         return 0;
     }
 
-    get locationY(): number {
+    get locationY():number {
         return 0;
     }
 
-    get location(): number {
+    get location():number {
         return 0;
     }
 
-    get characters(): number {
-        return 0;
-    }
-    get terrain(): number {
+    get characters():number {
         return 0;
     }
 
-    get perfHUD(): string {
+    get terrain():number {
+        return 0;
+    }
+
+    get perfHUD():string {
         return "";
     }
 
     /* Console */
 
-    OnConsoleText(c: (text: string) => void): void { }
-    ConsoleCommand(body: string): void { }
+    OnConsoleText(c:(text:string) => void):void {
+    }
+
+    ConsoleCommand(body:string):void {
+    }
 
     /* Login */
 
-    Connect(host: string, port: string, character: string, webAPIHost: string): void { }
+    Connect(host:string, port:string, character:string, webAPIHost:string):void {
+    }
 }
 
-declare var cuAPI: CUInGameAPI;
+declare var cuAPI:CUInGameAPI;
 
 if (typeof cuAPI === "undefined") {
     window["cuAPI"] = new CUFakeGameAPI();
-    window.addEventListener("load", () => { document.body.style.background = '#808080 url("../cu/fake-cuAPI.jpg") no-repeat fixed center'; });
+    window.addEventListener("load", () => {
+        document.body.style.background = '#808080 url("../cu/fake-cuAPI.jpg") no-repeat fixed center';
+    });
 }

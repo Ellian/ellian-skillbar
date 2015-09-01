@@ -74,7 +74,7 @@ var SoundEvents = {
     SET_STATE_CHARACTERCREATION_PREVIEW_VIKING: 2667493300,
     SET_STATE_CHARACTERCREATION_RACE: 501831174,
     SET_STATE_CHARACTERCREATION_SERVERSELECT: 1614103636,
-    STOP_UI_MENU_PREVIEWREALM: 997902358,
+    STOP_UI_MENU_PREVIEWREALM: 997902358
 };
 var AbilityTags;
 (function (AbilityTags) {
@@ -569,7 +569,7 @@ var KeyCode = {
         0xED: 'MEDIASELECT',
         0x09: '8',
         0x13: 'R',
-        0x0A: '9',
+        0x0A: '9'
     },
     jsKeyCodeMap: {
         8: 0x0E,
@@ -696,7 +696,7 @@ var KeyCode = {
         220: 0x2B,
         221: 0x1B,
         222: undefined,
-        223: 0x29,
+        223: 0x29
     },
     jsModifiedByShift: {
         192: '~',
@@ -1002,7 +1002,8 @@ var CU = (function () {
             return null;
         if (!this.allAbilitiesCallback) {
             this.allAbilitiesCallback = [callback];
-            return $.getJSON('http://hatchery.camelotunchained.com:8000/api/abilities');
+            //return $.getJSON('http://hatchery.camelotunchained.com:8000/api/abilities');
+            return $.getJSON('../cu/abilities.json');
         }
         else {
             this.allAbilitiesCallback.push(callback);
@@ -1746,3 +1747,4 @@ var Tooltip = (function () {
     return Tooltip;
 })();
 var cu = new CU();
+//# sourceMappingURL=cu.js.map
