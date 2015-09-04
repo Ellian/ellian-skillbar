@@ -416,6 +416,17 @@ module EllianActionbar {
     function increaseWidth() {
         barConfig.size = barConfig.size + 1;
         localStorage.setItem(BAR_CONFIG, JSON.stringify(barConfig));
+        // Add elements to the current action bar config
+        var isContentAdded:boolean = false;
+        while (barContent.bar1.length < barConfig.size) {
+            var slot:SlotData = new SlotData("", "default");
+            barContent.bar1.push(slot);
+            barContent.bar2.push(slot);
+            isContentAdded = true;
+        }
+        if (isContentAdded) {
+            localStorage.setItem(BAR_CONTENT, JSON.stringify(barContent));
+        }
         refreshActionBar();
     }
 
