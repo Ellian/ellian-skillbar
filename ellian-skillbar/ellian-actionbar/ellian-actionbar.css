@@ -124,12 +124,18 @@ html, body {
     cursor: pointer;
 }
 
-.default {
+.slot {
+    position: absolute;
+    width: 45px;
+    height: 45px;
+}
+
+
+.slotdefault {
     position: absolute;
     width: 45px;
     height: 45px;
     content: url('../images/skills/default.jpg');
-    opacity:1;
 }
 
 .activeHighlight,

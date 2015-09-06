@@ -12,8 +12,11 @@ module EllianActionbar {
     var BUTTON_LEFT_OFFSET:number = 5;
     var BAR_CONFIG:string = "ellian-actionbar-config";
     var BAR_CONTENT:string = "ellian-actionbar-content";
+    var DRAG_DATA:string = "ellian-dragdata";
     var TYPE_DEFAULT:string = "default";
     var TYPE_ABILITY:string = "ability";
+    var ATTR_NUM = "num";
+    var ATTR_TYPE = "type";
 
     /* jQuery Elements */
 
@@ -38,6 +41,8 @@ module EllianActionbar {
 
     var barConfig:ActionBarConfig;
     var barContent:ActionBarContent;
+
+    var isBarRefreshed:boolean = false;
 
     /* Class */
     class SlotData {
@@ -117,149 +122,58 @@ module EllianActionbar {
         tooltip = new Tooltip($actionbar1.children(), {leftOffset: 0, topOffset: -30});
     }
 
-    function drop(slot) {
-        console.log("drop " + slot.id);
-        // Don't do anything if dropping the same column we're dragging.
-        if (dragSrcEl != slot) {
-            var curPos = mapAbilities[dragSrcEl.id];
-            console.log("curPos " + dragSrcEl.id + " " + curPos);
-            var targetPos = mapAbilities[slot.id];
-            console.log("targetPos " + slot.id + " " + targetPos);
-            mapAbilities[dragSrcEl.id] = targetPos;
-            mapAbilities[slot.id] = curPos;
-            updateSkillbar();
-        } else {
-            dragSrcEl = null;
-        }
-        return false;
-    }
-
-    function drag(slot) {
-        console.log("drag " + slot.id);
-        slot.style.opacity = '0.4';
-        dragSrcEl = slot;
-    }
-
-    function allowDrop(e) {
+    function allowDrop(e:MouseEvent) {
         if (e.preventDefault) {
             e.preventDefault(); // Necessary. Allows us to drop.
         }
         return false;
     }
 
-    function mouseDown(e) {
-        console.log("mousedown " + this.id);
-        drag(this);
+    function mouseDown(e:MouseEvent) {
+        console.log("mousedown " + this.id + " " + this.style.opacity);
+        this.style.opacity = "0.4";
+        dragSrcEl = this;
+        var dragEvent:DragData = new DragData(this.getAttribute(ATTR_NUM), this.getAttribute(ATTR_TYPE));
+        localStorage.setItem(DRAG_DATA, JSON.stringify(dragEvent));
+        isBarRefreshed = false;
         e.stopPropagation();
     }
 
     function mouseUp(e) {
         console.log("mouseUp " + this.id);
-        dragSrcEl.style.opacity = '1';
-        drop(this);
-        e.stopPropagation();
-    }
-
-    function orderAbilities(abils) {
-        var orderedAbilities = [];
-        for (var i = 0; i < abils.length; i++) {
-            if (mapAbilities[abils[i].id] != null) {
-                orderedAbilities[mapAbilities[abils[i].id]] = abils[i];
+        // Don't do anything if dropping the same column we're dragging.
+        if (dragSrcEl != null) {
+            dragSrcEl.style.opacity = '1';
+            if (dragSrcEl != this) {
+                // Drag from the action bar
+                if (this.id.substring(0, 4) == "bar2" && dragSrcEl.id.substring(0, 4) == "bar2") {
+                    var tmp:SlotData = barContent.bar2[parseInt(this.id.replace("bar2-slot", ""))];
+                    barContent.bar2[parseInt(this.id.replace("bar2-slot", ""))] = barContent.bar2[parseInt(dragSrcEl.id.replace("bar2-slot", ""))];
+                    barContent.bar2[parseInt(dragSrcEl.id.replace("bar2-slot", ""))] = tmp;
+                }
+                if (this.id.substring(0, 4) == "bar2" && dragSrcEl.id.substring(0, 4) == "bar1") {
+                    var tmp:SlotData = barContent.bar2[parseInt(this.id.replace("bar2-slot", ""))];
+                    barContent.bar2[parseInt(this.id.replace("bar2-slot", ""))] = barContent.bar1[parseInt(dragSrcEl.id.replace("bar1-slot", ""))];
+                    barContent.bar1[parseInt(dragSrcEl.id.replace("bar1-slot", ""))] = tmp;
+                }
+                if (this.id.substring(0, 4) == "bar1" && dragSrcEl.id.substring(0, 4) == "bar1") {
+                    var tmp:SlotData = barContent.bar1[parseInt(this.id.replace("bar1-slot", ""))];
+                    barContent.bar1[parseInt(this.id.replace("bar1-slot", ""))] = barContent.bar1[parseInt(dragSrcEl.id.replace("bar1-slot", ""))];
+                    barContent.bar1[parseInt(dragSrcEl.id.replace("bar1-slot", ""))] = tmp;
+                }
+                if (this.id.substring(0, 4) == "bar1" && dragSrcEl.id.substring(0, 4) == "bar2") {
+                    var tmp:SlotData = barContent.bar1[parseInt(this.id.replace("bar1-slot", ""))];
+                    barContent.bar1[parseInt(this.id.replace("bar1-slot", ""))] = barContent.bar2[parseInt(dragSrcEl.id.replace("bar2-slot", ""))];
+                    barContent.bar2[parseInt(dragSrcEl.id.replace("bar2-slot", ""))] = tmp;
+                }
+                localStorage.setItem(BAR_CONTENT, JSON.stringify(barContent));
+                refreshActionBar();
             }
-        }
-        if (orderedAbilities.length != abils.length) {
-            console.log("Something went wrong. We reset the sorting of the abilities.");
-            orderedAbilities = abilities.sort(sortByAbilityID);
-        }
-        return orderedAbilities;
-    }
-
-    function updateSkillbar() {
-        return;
-
-        console.log("updateSkillbar");
-        $actionbar1.empty();
-        updateSkillbarWidth(abilities.length);
-
-        if (localStorage.getItem("ellian-skillbar") == null) {
-            abilities.sort(sortByAbilityID);
-            localStorage.setItem("ellian-skillbar", "initialized");
         } else {
-            console.log("not first time " + Object.keys(mapAbilities).length);
-            if (Object.keys(mapAbilities).length == 0) {
-                // Load current settings
-                console.log("load");
-                for (var i = 0; i < 50; i++) {
-                    if (localStorage.getItem("ellian-skillbar-" + i) != null) {
-                        mapAbilities[localStorage.getItem("ellian-skillbar-"
-                            + i)] = i;
-                        //                        console.log("cur pos "
-                        //                            + localStorage.getItem("ellian-skillbar-" + i)
-                        //                            + " " + i);
-                    }
-                }
-                abilities = orderAbilities(abilities);
-            } else {
-                console.log("order");
-                // Order abilities
-                abilities = orderAbilities(abilities);
-                for (var i = 0; i < 50; i++) {
-                    // Reset stored information
-                    localStorage.removeItem("ellian-skillbar-" + i);
-                }
-            }
+            // TODO drag from spell book
         }
-
-        abilities.forEach(function (ability, i) {
-            localStorage.setItem("ellian-skillbar-" + i, ability.id);
-            mapAbilities[ability.id] = i;
-
-            // Create slot
-
-            var slot = document.createElement('div');
-            $(slot).attr('id', ability.id).appendTo($actionbar1).attr(
-                'draggable', 'true');
-
-            // slot.addEventListener("dragend", dragEnd, true);
-            slot.addEventListener("dragover", allowDrop, false);
-            slot.addEventListener("mousedown", mouseDown, true);
-            //  slot.addEventListener("mousemove", mouseMove, true);
-            slot.addEventListener("mouseup", mouseUp, true);
-            //    slot.addEventListener("mouseover", mouseOver, true);
-
-            // Create button
-            var button = ability.MakeButton(defaultOrderAbilities[ability.id]);
-            var elem = button.rootElement.css({
-                left: (i * BUTTON_WIDTH + BUTTON_LEFT_OFFSET) + 'px',
-                top: '0'
-            });
-
-            if (ability.name)
-                elem.attr('data-tooltip-title', ability.name);
-            if (ability.tooltip)
-                elem.attr('data-tooltip-content', ability.tooltip);
-            elem.click(function () {
-                console.log("button click");
-                ability.Perform();
-            });
-            elem.css('opacity', '1');
-            elem.prepend("<span class='abilnum'>" + (defaultOrderAbilities[ability.id] + 1) + ":</span>");
-
-            $(slot).append(elem);
-
-            // $actionbar1.append(elem);
-        });
-
-        // tmp debug
-        //        for (var i = 0; i < 50; i++) {
-        //            // Reset stored information
-        //            if (localStorage.getItem("ellian-skillbar-" + i) != null) {
-        //                console.log("pos " + i + ": " + localStorage.getItem("ellian-skillbar-" + i));
-        //            }
-        //
-        //        }
-
-        updateTooltip();
+        dragSrcEl = null;
+        e.stopPropagation();
     }
 
     function onAbilityCreated(id, a) {
@@ -267,22 +181,16 @@ module EllianActionbar {
         var craftedAbility = JSON.parse(a);
         craftedAbility.id = craftedAbility.id.toString(16);
         craftedAbility.tooltip = craftedAbility.tooltip || craftedAbility.notes;
-
         registerAbility(craftedAbility);
-
         var ability = cu.UpdateAbility(craftedAbility);
-
         abilities.push(ability);
-
         defaultOrderAbilities[id] = abilities.length - 1;
-
-        updateSkillbar();
+        mapAbilities[id] = ability;
     }
 
     function removeAbilityById(id) {
         for (var i = abilities.length - 1; i >= 0; i--) {
             var ability = abilities[i];
-
             if (ability.id.toString(16) === id) {
                 abilities.splice(i, 1);
             }
@@ -301,8 +209,7 @@ module EllianActionbar {
     function onAbilityDeleted(id) {
         console.log("onAbilityDeleted " + id);
         removeAbilityById(id);
-
-        updateSkillbar();
+        refreshActionBar();
     }
 
     function registerAbility(craftedAbility) {
@@ -330,36 +237,28 @@ module EllianActionbar {
     function onCharacterIDChanged(characterID) {
         var req = cu.RequestAllAbilities(cuAPI.loginToken, characterID, abils => {
             abilities = abils;
-
             abilities.forEach(function (abil, i) {
                 defaultOrderAbilities[abil.id] = i;
+                mapAbilities[abil.id] = abil;
                 console.log("def : " + abil.id + " " + i);
             });
-
-            updateSkillbar();
-
+            refreshActionBar();
         });
-
         if (!req) return;
-
         req.then(abils => {
             if (!abils || !abils.length) return;
-
             abils.sort(sortByAbilityID);
-
             abils.forEach(abil => {
                 abil.id = abil.id.toString(16);
                 abil.tooltip = abil.tooltip || abil.notes;
-
                 registerAbility(abil);
             });
-
             cu.UpdateAllAbilities(abils);
         });
     }
 
     function refreshActionBar() {
-        console.log("refreshActionBar");
+        console.log("refreshActionBar " + barConfig.size);
         $actionbar1.empty();
         $actionbar2.empty();
         updateActionbarWidth(barConfig.size);
@@ -380,31 +279,44 @@ module EllianActionbar {
         // arrow settings
         if (barConfig.size < 5) {
             $leftarrow.css('visibility', 'hidden');
+            $leftarrow.off('click');
         } else {
             $leftarrow.css('visibility', 'visible');
+            $leftarrow.off('click');
             $leftarrow.on('click', decreaseWidth);
         }
         if (barConfig.size > 20) {
             $rightarrow.css('visibility', 'hidden');
+            $rightarrow.off('click');
         } else {
             $rightarrow.css('visibility', 'visible');
+            $rightarrow.off('click');
             $rightarrow.on('click', increaseWidth);
         }
         if (barConfig.isBar2Displayed) {
             $uparrow.css('visibility', 'hidden');
+            $downarrow.off('click');
+            $uparrow.off('click');
             $downarrow.on('click', hideBar2);
             $downarrow.css('visibility', 'visible');
         } else {
+            $downarrow.off('click');
+            $uparrow.off('click');
             $uparrow.on('click', displayBar2);
             $uparrow.css('visibility', 'visible');
             $downarrow.css('visibility', 'hidden');
         }
 
         // delete button
+        $delete.off('dragover');
+        $delete.off('mouseup');
+        $delete.off('drop');
         $delete.on('dragover', allowDrop);
-        $delete.on('mousedown', removeSlot);
+        $delete.on('mouseup', removeSlot);
+        $delete.on('drop', removeSlot);
 
         updateTooltip();
+        isBarRefreshed = true;
     }
 
     function decreaseWidth() {
@@ -413,14 +325,36 @@ module EllianActionbar {
         refreshActionBar();
     }
 
-    function increaseWidth() {
+    function increaseWidth(e:MouseEvent) {
+        console.log("increaseWidth " + barConfig.size);
         barConfig.size = barConfig.size + 1;
         localStorage.setItem(BAR_CONFIG, JSON.stringify(barConfig));
+        var isSlotAdded:boolean = false;
+        for (var i = 0; i < (barConfig.size - barContent.bar1.length); i++) {
+            barContent.bar1.push(new SlotData('', TYPE_DEFAULT));
+            barContent.bar2.push(new SlotData('', TYPE_DEFAULT));
+            isSlotAdded = true;
+        }
+        if (isSlotAdded) {
+            localStorage.setItem(BAR_CONTENT, JSON.stringify(barContent));
+        }
         refreshActionBar();
     }
 
     function removeSlot() {
-        console.log("removeSlot");
+        if (dragSrcEl != null) {
+            dragSrcEl.style.opacity = '1';
+            // Drag from the action bar
+            if (dragSrcEl.id.substring(0, 4) == "bar2") {
+                barContent.bar2[parseInt(dragSrcEl.id.replace("bar2-slot", ""))] = new SlotData(TYPE_DEFAULT, TYPE_DEFAULT);
+            }
+            if (dragSrcEl.id.substring(0, 4) == "bar1") {
+                barContent.bar1[parseInt(dragSrcEl.id.replace("bar1-slot", ""))] = new SlotData(TYPE_DEFAULT, TYPE_DEFAULT);
+            }
+            localStorage.setItem(BAR_CONTENT, JSON.stringify(barContent));
+            refreshActionBar();
+            dragSrcEl = null;
+        }
     }
 
     function displayBar2() {
@@ -440,7 +374,9 @@ module EllianActionbar {
         slot.addEventListener("dragover", allowDrop, false);
         slot.addEventListener("mousedown", mouseDown, true);
         slot.addEventListener("mouseup", mouseUp, true);
+        slot.addEventListener("drop", mouseUp, true);
         $(slot).attr('draggable', 'true');
+        $(slot).attr('style', 'opacity: 1;')
         if (isBar2) {
             $(slot).appendTo($actionbar2)
             $(slot).attr('id', 'bar2-slot' + num);
@@ -455,14 +391,46 @@ module EllianActionbar {
                 $(slot).css('top', '0px');
             }
         }
+        $(slot).css('left', (num * BUTTON_WIDTH + BUTTON_LEFT_OFFSET) + 'px');
         if (slotData.type == TYPE_DEFAULT) {
-            $(slot).attr('type', TYPE_DEFAULT);
-            $(slot).attr('class', 'default');
-            $(slot).css('left', (num * BUTTON_WIDTH + BUTTON_LEFT_OFFSET) + 'px');
+            $(slot).attr(ATTR_TYPE, TYPE_DEFAULT);
+            $(slot).attr(ATTR_NUM, TYPE_DEFAULT);
+            $(slot).attr('class', 'slotdefault');
         }
         if (slotData.type == TYPE_ABILITY) {
-            //$(slot).attr('id', ability.id);
-            $(slot).attr('type', TYPE_ABILITY);
+            // Create button
+            if (mapAbilities[slotData.id] != null) {
+                $(slot).attr(ATTR_TYPE, TYPE_ABILITY);
+                $(slot).attr(ATTR_NUM, slotData.id);
+                $(slot).attr('class', 'slot');
+                var ability = mapAbilities[slotData.id];
+                var button = ability.MakeButton(defaultOrderAbilities[ability.id]);
+                var elem = button.rootElement;
+                if (ability.name)
+                    elem.attr('data-tooltip-title', ability.name);
+                if (ability.tooltip)
+                    elem.attr('data-tooltip-content', ability.tooltip);
+                elem.click(function () {
+                    console.log("button click");
+                    ability.Perform();
+                });
+                elem.prepend("<span class='abilnum'>" + (defaultOrderAbilities[ability.id] + 1) + ":</span>");
+                $(slot).append(elem);
+            } else {
+                // The ability does not exist anymore
+                console.log("The ability does not exist anymore");
+                $(slot).attr(ATTR_TYPE, TYPE_DEFAULT);
+                $(slot).attr(ATTR_NUM, TYPE_DEFAULT);
+                $(slot).attr('class', 'slotdefault');
+                if (isBar2) {
+                    var tmpSlot:SlotData = new SlotData(TYPE_DEFAULT, TYPE_DEFAULT);
+                    barContent.bar2[num] = tmpSlot;
+                } else {
+                    var tmpSlot:SlotData = new SlotData(TYPE_DEFAULT, TYPE_DEFAULT);
+                    barContent.bar1[num] = tmpSlot;
+                }
+                localStorage.setItem(BAR_CONTENT, JSON.stringify(barContent));
+            }
         }
     }
 
@@ -476,10 +444,20 @@ module EllianActionbar {
         if (localStorage.getItem(BAR_CONTENT) != null) {
             barContent = JSON.parse(localStorage.getItem(BAR_CONTENT));
         } else {
-            var bar1:SlotData = [];
-            bar1.push(new SlotData());
+            var bar1:SlotData[] = [];
+            bar1.push(new SlotData("", TYPE_DEFAULT));
             for (var i:number = 0; i < 5; i++) {
-                var slot:SlotData = new SlotData("", "default");
+                var slot:SlotData = new SlotData(TYPE_DEFAULT, TYPE_DEFAULT);
+                // FIXME debug
+                if (i == 0) {
+                    slot = new SlotData("b", TYPE_ABILITY);
+                }
+                if (i == 1) {
+                    slot = new SlotData("3e", TYPE_ABILITY);
+                }
+                if (i == 2) {
+                    slot = new SlotData("86", TYPE_ABILITY);
+                }
                 bar1[i] = slot;
             }
             barContent = new ActionBarContent(bar1, bar1);
@@ -490,18 +468,11 @@ module EllianActionbar {
     /* Initialization */
     if (cu.HasAPI()) {
         cu.OnInitialized(() => {
-
-            init();
-
             cuAPI.CloseUI("skillbar");
-
             cuAPI.OnCharacterIDChanged(onCharacterIDChanged);
-
             cuAPI.OnAbilityCreated(onAbilityCreated);
-
             cuAPI.OnAbilityDeleted(onAbilityDeleted);
-
-            refreshActionBar();
+            init();
         });
     }
 }
