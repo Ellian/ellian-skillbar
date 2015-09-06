@@ -171,6 +171,22 @@ module EllianActionbar {
             }
         } else {
             // TODO drag from spell book
+            if (localStorage.getItem(DRAG_DATA) != null) {
+                var dragData:DragData = JSON.parse(localStorage.getItem(DRAG_DATA));
+                if (new Date().getTime() - dragData.time < 5000){
+                    // the drag event is recent
+                    console.log("spell " + dragData.id);
+                    var newSlot:SlotData = new SlotData(dragData.id, dragData.type);
+                    if (this.id.substring(0, 4) == "bar1"){
+                        barContent.bar1[parseInt(this.id.replace("bar1-slot", ""))] = newSlot;
+                    } else {
+                        barContent.bar2[parseInt(this.id.replace("bar2-slot", ""))] = newSlot;
+                    }
+                    localStorage.setItem(BAR_CONTENT, JSON.stringify(barContent));
+                    refreshActionBar();
+                }
+                localStorage.removeItem(DRAG_DATA);
+            }
         }
         dragSrcEl = null;
         e.stopPropagation();

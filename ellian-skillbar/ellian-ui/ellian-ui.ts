@@ -25,17 +25,17 @@ module EllianUI {
         var but = document.createElement('button');
         $(but).attr('type', 'button').attr('class', 'button').appendTo($uis);
         $(but).text("Toggle Spellbook");
-        $(but).attr("onclick", "ToggleUIVisibility('ellian-spellbook')");
+        $(but).attr("onclick", "toggleUIVisibility('ellian-spellbook')");
 
         var but = document.createElement('button');
         $(but).attr('type', 'button').attr('class', 'button').appendTo($uis);
         $(but).text("Open Action Bar");
-        $(but).attr("onclick", "OpenUI('ellian-actionbar')");
+        $(but).attr("onclick", "openUI('ellian-actionbar')");
 
         var but = document.createElement('button');
         $(but).attr('type', 'button').attr('class', 'button').appendTo($uis);
         $(but).text("Close Action Bar");
-        $(but).attr("onclick", "CloseUI('ellian-actionbar')");
+        $(but).attr("onclick", "closeUI('ellian-actionbar')");
     }
 
     /* Initialization */
@@ -47,13 +47,16 @@ module EllianUI {
 }
 
 function openUI(name:string) {
+    console.log("OpenUI " + name);
     cuAPI.OpenUI(name);
 }
 
 function closeUI(name:string) {
+    console.log("closeUI " + name);
     cuAPI.CloseUI(name);
 }
 
-function ToggleUIVisibility(name: string){
+function toggleUIVisibility(name: string){
+    console.log("toggleUIVisibility " + name);
     cuAPI.ToggleUIVisibility(name);
 }

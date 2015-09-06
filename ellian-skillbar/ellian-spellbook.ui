@@ -1,6 +1,6 @@
 {
-    "name": "spellbook",
-    "mainFile": "spellbook/spellbook.html",
+    "name": "ellian-spellbook",
+    "mainFile": "ellian-spellbook/ellian-spellbook.html",
     "handlesInput": true,
     "handlesAbilities": true,
     "handlesCharacter": true,
