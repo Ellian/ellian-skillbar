@@ -4,3 +4,5 @@
 
 /// <reference path="../vendor/jquery.d.ts" />
 /// <reference path="../cu/cu.ts" />
+
+setTimeout(function(){postMessage("isRefreshed"); }, 2000);

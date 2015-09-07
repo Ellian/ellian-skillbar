@@ -136,6 +136,15 @@ module EllianActionbar {
         var dragEvent:DragData = new DragData(this.getAttribute(ATTR_NUM), this.getAttribute(ATTR_TYPE));
         localStorage.setItem(DRAG_DATA, JSON.stringify(dragEvent));
         isBarRefreshed = false;
+        if(typeof(w) == "undefined") {
+            var w:Worker = new Worker("opacityWorker.js");
+            w.onmessage = function(event){
+                if (isBarRefreshed == false){
+                    refreshActionBar();
+                }
+                w.terminate();
+            };
+        }
         e.stopPropagation();
     }
 
