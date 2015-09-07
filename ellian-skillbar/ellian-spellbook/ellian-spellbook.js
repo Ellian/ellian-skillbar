@@ -1112,6 +1112,7 @@ var Spellbook;
             lastComponentsPage = pageNumber + 1;
     }
     function initialize() {
+        cuAPI.CloseUI("spellbook");
         $(document).click(hideSearch);
         $document.on('contextmenu', ignoreEvent);
         $document.keydown(handleArrowKeys);

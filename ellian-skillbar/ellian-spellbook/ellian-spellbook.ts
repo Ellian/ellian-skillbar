@@ -1414,6 +1414,7 @@ module Spellbook {
     }
 
     function initialize() {
+        cuAPI.CloseUI("spellbook");
 
         $(document).click(hideSearch);
 

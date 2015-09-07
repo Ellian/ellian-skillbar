@@ -36,7 +36,8 @@ module EllianActionbar {
     var abilities = [];
     var mapAbilities = {};
     var defaultOrderAbilities = {};
-    var tooltip = null;
+    var tooltipBar1 = null;
+    var tooltipBar2 = null;
     var dragSrcEl = null;
 
     var barConfig:ActionBarConfig;
@@ -117,9 +118,11 @@ module EllianActionbar {
     }
 
     function updateTooltip() {
-        if (tooltip) tooltip.destroy();
+        if (tooltipBar1) tooltipBar1.destroy();
+        if (tooltipBar2) tooltipBar2.destroy();
 
-        tooltip = new Tooltip($actionbar1.children(), {leftOffset: 0, topOffset: -30});
+        tooltipBar1 = new Tooltip($actionbar1.children(), {leftOffset: 0, topOffset: -30});
+        tooltipBar2 = new Tooltip($actionbar2.children(), {leftOffset: 0, topOffset: -30});
     }
 
     function allowDrop(e:MouseEvent) {
@@ -488,6 +491,11 @@ module EllianActionbar {
             barContent = new ActionBarContent(bar1, bar1);
             localStorage.setItem(BAR_CONTENT, JSON.stringify(barContent));
         }
+        var tooltip = new Tooltip($leftarrow, { title: "Reduce", content: "Reduce the number of slots of the action bars. The minimum size is 5 slots.", leftOffset: 0, topOffset: -30 });
+        var tooltip = new Tooltip($rightarrow, { title: "Increase", content: "Increase the number of slots of the action bars. The maximum size is 20 slots.", leftOffset: 0, topOffset: -30 });
+        var tooltip = new Tooltip($uparrow, { title: "Display", content: "Display the second action bar.", leftOffset: 0, topOffset: -30 });
+        var tooltip = new Tooltip($downarrow, { title: "Hide", content: "Hide the second action bar.", leftOffset: 0, topOffset: -30 });
+        var tooltip = new Tooltip($delete, { title: "Remove", content: "Remove an item from the action bar and reset it to the default icon.", leftOffset: 0, topOffset: -30 });
     }
 
     /* Initialization */
