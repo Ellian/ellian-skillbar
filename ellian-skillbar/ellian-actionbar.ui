@@ -1,0 +1,15 @@
+{
+    "name": "ellian-actionbar",
+    "mainFile": "ellian-actionbar/ellian-actionbar.html",
+    "rect": {
+        "left": 70,
+        "top": 670,
+        "right": 1380,
+        "bottom": 900
+    },
+    "handlesAbilities": true,
+    "handlesCharacter": true,
+    "handlesConfig": true,
+    "handlesInput": true,
+    "layer": 1
+}

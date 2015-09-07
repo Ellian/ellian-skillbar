@@ -2,9 +2,9 @@
     "name": "ellian-ui",
     "mainFile": "ellian-ui/ellian-ui.html",
     "rect": {
-        "left": 1380,
+        "left": 1180,
         "top": 670,
-        "right": 1580,
+        "right": 1350,
         "bottom": 900
     },
     "handlesInput": true,

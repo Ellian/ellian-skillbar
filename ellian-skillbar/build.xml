@@ -4,9 +4,9 @@
     <property environment="env"/>
 
     <target name="deploy" description="Copy the mod files into CU directory">
-        <!--		<copy file="ellian-skillbar\ActiveFrame.gif" tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-skillbar\ActiveFrame.gif" />
-                <copy file="ellian-skillbar\ActiveFrame.gif" tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-skillbar\ActiveFrame.gif" />
-                -->
+
+        <!-- ELLIAN SKILL BAR -->
+
         <copy file=".\ellian-skillbar\ellian-skillbar.css"
               tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-skillbar\ellian-skillbar.css"/>
         <copy file=".\ellian-skillbar\ellian-skillbar.css"
@@ -22,9 +22,6 @@
         <copy file="ellian-skillbar\ellian-skillbar.js"
               tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-skillbar\ellian-skillbar.js"/>
 
-        <!--	<copy file="ellian-skillbar\NextArrow.png" tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-skillbar\NextArrow.png" />
-            <copy file="ellian-skillbar\NextArrow.png" tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-skillbar\NextArrow.png" />-->
-
         <copy file="ellian-skillbar.ui" tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-skillbar.ui"/>
         <copy file="ellian-skillbar.ui" tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-skillbar.ui"/>
 
@@ -34,6 +31,63 @@
             <zipfileset prefix="ellian-skillbar" file="ellian-skillbar/ellian-skillbar.css"/>
             <zipfileset prefix="ellian-skillbar" file="ellian-skillbar/ellian-skillbar.js"/>
         </zip>
+
+        <!-- ELLIAN UI BAR -->
+        <copy file=".\ellian-ui\ellian-ui.css"
+              tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-ui\ellian-ui.css"/>
+        <copy file=".\ellian-ui\ellian-ui.css"
+              tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-ui\ellian-ui.css"/>
+
+        <copy file="ellian-ui\ellian-ui.html"
+              tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-ui\ellian-ui.html"/>
+        <copy file="ellian-ui\ellian-ui.html"
+              tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-ui\ellian-ui.html"/>
+
+        <copy file="ellian-ui\ellian-ui.js"
+              tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-ui\ellian-ui.js"/>
+        <copy file="ellian-ui\ellian-ui.js"
+              tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-ui\ellian-ui.js"/>
+
+        <copy file="ellian-ui.ui" tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-ui.ui"/>
+        <copy file="ellian-ui.ui" tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-ui.ui"/>
+
+        <!-- ELLIAN SPELLBOOK -->
+        <copy file=".\ellian-spellbook\ellian-spellbook.css"
+              tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-spellbook\ellian-spellbook.css"/>
+        <copy file=".\ellian-spellbook\ellian-spellbook.css"
+              tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-spellbook\ellian-spellbook.css"/>
+
+        <copy file="ellian-spellbook\ellian-spellbook.html"
+              tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-spellbook\ellian-spellbook.html"/>
+        <copy file="ellian-spellbook\ellian-spellbook.html"
+              tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-spellbook\ellian-spellbook.html"/>
+
+        <copy file="ellian-spellbook\ellian-spellbook.js"
+              tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-spellbook\ellian-spellbook.js"/>
+        <copy file="ellian-spellbook\ellian-spellbook.js"
+              tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-spellbook\ellian-spellbook.js"/>
+
+        <copy file="ellian-spellbook.ui" tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-spellbook.ui"/>
+        <copy file="ellian-spellbook.ui" tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-spellbook.ui"/>
+
+        <!-- ELLIAN ACTIONBAR -->
+        <copy file=".\ellian-actionbar\ellian-actionbar.css"
+              tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-actionbar\ellian-actionbar.css"/>
+        <copy file=".\ellian-actionbar\ellian-actionbar.css"
+              tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-actionbar\ellian-actionbar.css"/>
+
+        <copy file="ellian-actionbar\ellian-actionbar.html"
+              tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-actionbar\ellian-actionbar.html"/>
+        <copy file="ellian-actionbar\ellian-actionbar.html"
+              tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-actionbar\ellian-actionbar.html"/>
+
+        <copy file="ellian-actionbar\ellian-actionbar.js"
+              tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-actionbar\ellian-actionbar.js"/>
+        <copy file="ellian-actionbar\ellian-actionbar.js"
+              tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-actionbar\ellian-actionbar.js"/>
+
+        <copy file="ellian-actionbar.ui" tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-actionbar.ui"/>
+        <copy file="ellian-actionbar.ui" tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-actionbar.ui"/>
 
 
     </target>
