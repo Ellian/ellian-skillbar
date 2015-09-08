@@ -112,6 +112,30 @@ html, body {
     background-color: black;
 }
 
+#drawer {
+    position: absolute;
+    top: 26px;
+    left: -20px;
+    z-index: 2;
+    padding-bottom: 1px;
+    padding-left: 1px;
+    padding-top: 1px;
+}
+
+#close {
+    position: absolute;
+    top: -8px;
+    background-color: black;
+}
+
+.drawerSlot {
+    height: 30px;
+    width : 30px;
+    padding-left: 1px;
+    padding-top: 1px;
+    float: left;
+}
+
 .arrow {
     font-size: 8px;
     font-family: Arial, sans-serif;

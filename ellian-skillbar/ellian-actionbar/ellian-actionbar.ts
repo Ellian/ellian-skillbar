@@ -17,6 +17,8 @@ module EllianActionbar {
     var TYPE_ABILITY:string = "ability";
     var ATTR_NUM = "num";
     var ATTR_TYPE = "type";
+    var BANDAGE_ABILITY_ID = (31).toString(16);
+
 
     /* jQuery Elements */
 
@@ -31,19 +33,24 @@ module EllianActionbar {
     var $rightarrow = cu.FindElement('#rightarrow');
     var $downarrow = cu.FindElement('#downarrow');
     var $delete = cu.FindElement('#delete');
+    var $drawer = cu.FindElement('#drawer');
 
     /* Variables */
+    var bandage:Ability;
     var abilities = [];
     var mapAbilities = {};
     var defaultOrderAbilities = {};
-    var tooltipBar1 = null;
-    var tooltipBar2 = null;
+    var tooltipBar1:Tooltip = null;
+    var tooltipBar2:Tooltip = null;
+    var tooltipDrawer:Tooltip = null;
+    var tooltipOpenDrawer = null;
     var dragSrcEl = null;
 
     var barConfig:ActionBarConfig;
     var barContent:ActionBarContent;
 
     var isBarRefreshed:boolean = false;
+    var isDrawerDisplayed:boolean = false
 
     /* Class */
     class SlotData {
@@ -139,11 +146,12 @@ module EllianActionbar {
         var dragEvent:DragData = new DragData(this.getAttribute(ATTR_NUM), this.getAttribute(ATTR_TYPE));
         localStorage.setItem(DRAG_DATA, JSON.stringify(dragEvent));
         isBarRefreshed = false;
-        if(typeof(w) == "undefined") {
+        if (typeof(w) == "undefined") {
             var w:Worker = new Worker("opacityWorker.js");
-            w.onmessage = function(event){
-                if (isBarRefreshed == false){
+            w.onmessage = function (event) {
+                if (isBarRefreshed == false) {
                     refreshActionBar();
+                    triggerDrawer();
                 }
                 w.terminate();
             };
@@ -158,47 +166,60 @@ module EllianActionbar {
             dragSrcEl.style.opacity = '1';
             if (dragSrcEl != this) {
                 // Drag from the action bar
+                var fromDrawer:boolean = true;
                 if (this.id.substring(0, 4) == "bar2" && dragSrcEl.id.substring(0, 4) == "bar2") {
+                    fromDrawer = false;
                     var tmp:SlotData = barContent.bar2[parseInt(this.id.replace("bar2-slot", ""))];
                     barContent.bar2[parseInt(this.id.replace("bar2-slot", ""))] = barContent.bar2[parseInt(dragSrcEl.id.replace("bar2-slot", ""))];
                     barContent.bar2[parseInt(dragSrcEl.id.replace("bar2-slot", ""))] = tmp;
                 }
                 if (this.id.substring(0, 4) == "bar2" && dragSrcEl.id.substring(0, 4) == "bar1") {
+                    fromDrawer = false;
                     var tmp:SlotData = barContent.bar2[parseInt(this.id.replace("bar2-slot", ""))];
                     barContent.bar2[parseInt(this.id.replace("bar2-slot", ""))] = barContent.bar1[parseInt(dragSrcEl.id.replace("bar1-slot", ""))];
                     barContent.bar1[parseInt(dragSrcEl.id.replace("bar1-slot", ""))] = tmp;
                 }
                 if (this.id.substring(0, 4) == "bar1" && dragSrcEl.id.substring(0, 4) == "bar1") {
+                    fromDrawer = false;
                     var tmp:SlotData = barContent.bar1[parseInt(this.id.replace("bar1-slot", ""))];
                     barContent.bar1[parseInt(this.id.replace("bar1-slot", ""))] = barContent.bar1[parseInt(dragSrcEl.id.replace("bar1-slot", ""))];
                     barContent.bar1[parseInt(dragSrcEl.id.replace("bar1-slot", ""))] = tmp;
                 }
                 if (this.id.substring(0, 4) == "bar1" && dragSrcEl.id.substring(0, 4) == "bar2") {
+                    fromDrawer = false;
                     var tmp:SlotData = barContent.bar1[parseInt(this.id.replace("bar1-slot", ""))];
                     barContent.bar1[parseInt(this.id.replace("bar1-slot", ""))] = barContent.bar2[parseInt(dragSrcEl.id.replace("bar2-slot", ""))];
                     barContent.bar2[parseInt(dragSrcEl.id.replace("bar2-slot", ""))] = tmp;
                 }
-                localStorage.setItem(BAR_CONTENT, JSON.stringify(barContent));
-                refreshActionBar();
-            }
-        } else {
-            // TODO drag from spell book
-            if (localStorage.getItem(DRAG_DATA) != null) {
-                var dragData:DragData = JSON.parse(localStorage.getItem(DRAG_DATA));
-                if (new Date().getTime() - dragData.time < 5000){
-                    // the drag event is recent
-                    console.log("spell " + dragData.id);
-                    var newSlot:SlotData = new SlotData(dragData.id, dragData.type);
-                    if (this.id.substring(0, 4) == "bar1"){
+                if (fromDrawer) {
+                    var newSlot:SlotData = new SlotData(dragSrcEl.getAttribute(ATTR_NUM), dragSrcEl.getAttribute(ATTR_TYPE));
+                    if (this.id.substring(0, 4) == "bar1") {
                         barContent.bar1[parseInt(this.id.replace("bar1-slot", ""))] = newSlot;
                     } else {
                         barContent.bar2[parseInt(this.id.replace("bar2-slot", ""))] = newSlot;
                     }
-                    localStorage.setItem(BAR_CONTENT, JSON.stringify(barContent));
-                    refreshActionBar();
                 }
-                localStorage.removeItem(DRAG_DATA);
+                localStorage.setItem(BAR_CONTENT, JSON.stringify(barContent));
+                refreshActionBar();
             }
+            /*    } else {
+             // TODO drag from spell book
+             if (localStorage.getItem(DRAG_DATA) != null) {
+             var dragData:DragData = JSON.parse(localStorage.getItem(DRAG_DATA));
+             if (new Date().getTime() - dragData.time < 5000) {
+             // the drag event is recent
+             console.log("spell " + dragData.id);
+             var newSlot:SlotData = new SlotData(dragData.id, dragData.type);
+             if (this.id.substring(0, 4) == "bar1") {
+             barContent.bar1[parseInt(this.id.replace("bar1-slot", ""))] = newSlot;
+             } else {
+             barContent.bar2[parseInt(this.id.replace("bar2-slot", ""))] = newSlot;
+             }
+             localStorage.setItem(BAR_CONTENT, JSON.stringify(barContent));
+             refreshActionBar();
+             }
+             localStorage.removeItem(DRAG_DATA);
+             }*/
         }
         dragSrcEl = null;
         e.stopPropagation();
@@ -462,6 +483,81 @@ module EllianActionbar {
         }
     }
 
+    function triggerDrawer() {
+        if (isDrawerDisplayed) {
+            isDrawerDisplayed = false;
+            displayClosedDrawer();
+        } else {
+            isDrawerDisplayed = true;
+            displayOpenedDrawer();
+        }
+    }
+
+    function displayOpenedDrawer() {
+        $drawer.empty();
+        var w:number = 4;
+        $drawer.css('width', w * 30);
+        $drawer.css('height', (Math.round(abilities.length / w) + 1) * 30);
+        $drawer.css('left', -w * 30);
+        $drawer.css('top', -(Math.round(abilities.length / w) + 1) * 30);
+        $drawer.css('background-image', "url('../images/spellbook/left-page.png')");
+        $drawer.css('padding-right', '2px');
+
+        abilities.forEach(function (ability, i) {
+            var abil = document.createElement('div');
+            $(abil).css('content', "url('" + ability.icon + "')");
+            $(abil).attr('class', 'drawerSlot');
+            if (ability.name)
+                $(abil).attr('data-tooltip-title', ability.name);
+            if (ability.tooltip)
+                $(abil).attr('data-tooltip-content', ability.tooltip);
+            $(abil).on('mousedown', mouseDown);
+            $(abil).attr(ATTR_NUM, ability.id);
+            $(abil).attr(ATTR_TYPE, TYPE_ABILITY);
+            $drawer.append(abil);
+        });
+        if (tooltipDrawer) tooltipDrawer.destroy();
+        tooltipDrawer = new Tooltip($drawer.children(), {leftOffset: 0, topOffset: -30});
+
+        var close = document.createElement('img');
+        $(close).attr('id', 'close');
+        $(close).css('left', w * 30 + 2);
+        $(close).attr('src', '../images/spellbook/btn-close.png');
+        $(close).attr('height', '12px').attr('width', '12px');
+        $(close).on('click', triggerDrawer);
+        var tooltipOpenDrawer = new Tooltip($(close), {
+            title: "Close",
+            content: "Close the drawer.",
+            leftOffset: 0,
+            topOffset: -30
+        });
+        $drawer.append(close);
+        $(close).off('click');
+        $(close).on('click', triggerDrawer);
+    }
+
+    function displayClosedDrawer() {
+        $drawer.empty();
+        var open = document.createElement('img');
+        $(open).attr('src', '../images/spellbook/btn-add-bookmark.jpg');
+        $(open).attr('height', '18px').attr('width', '18px');
+        var tooltipOpenDrawer = new Tooltip($(open), {
+            title: "Open",
+            content: "Open the drawer containing the available abilities and commands.",
+            leftOffset: 0,
+            topOffset: -30
+        });
+        $drawer.css('left', '-20px');
+        $drawer.css('top', '26px');
+        $drawer.css('background-image', "url('../images/spellbook/left-page.png')");
+        $drawer.css('width', '18px');
+        $drawer.css('height', '18px');
+        $drawer.css('padding-right', '0px');
+        $drawer.append(open);
+        $(open).off('click');
+        $(open).on('click', triggerDrawer);
+    }
+
     function init() {
         if (localStorage.getItem(BAR_CONFIG) != null) {
             barConfig = JSON.parse(localStorage.getItem(BAR_CONFIG));
@@ -491,21 +587,55 @@ module EllianActionbar {
             barContent = new ActionBarContent(bar1, bar1);
             localStorage.setItem(BAR_CONTENT, JSON.stringify(barContent));
         }
-        var tooltip = new Tooltip($leftarrow, { title: "Reduce", content: "Reduce the number of slots of the action bars. The minimum size is 5 slots.", leftOffset: 0, topOffset: -30 });
-        var tooltip = new Tooltip($rightarrow, { title: "Increase", content: "Increase the number of slots of the action bars. The maximum size is 20 slots.", leftOffset: 0, topOffset: -30 });
-        var tooltip = new Tooltip($uparrow, { title: "Display", content: "Display the second action bar.", leftOffset: 0, topOffset: -30 });
-        var tooltip = new Tooltip($downarrow, { title: "Hide", content: "Hide the second action bar.", leftOffset: 0, topOffset: -30 });
-        var tooltip = new Tooltip($delete, { title: "Remove", content: "Remove an item from the action bar and reset it to the default icon.", leftOffset: 0, topOffset: -30 });
+        var tooltip = new Tooltip($leftarrow, {
+            title: "Reduce",
+            content: "Reduce the number of slots of the action bars. The minimum size is 5 slots.",
+            leftOffset: 0,
+            topOffset: -30
+        });
+        var tooltip = new Tooltip($rightarrow, {
+            title: "Increase",
+            content: "Increase the number of slots of the action bars. The maximum size is 20 slots.",
+            leftOffset: 0,
+            topOffset: -30
+        });
+        var tooltip = new Tooltip($uparrow, {
+            title: "Display",
+            content: "Display the second action bar.",
+            leftOffset: 0,
+            topOffset: -30
+        });
+        var tooltip = new Tooltip($downarrow, {
+            title: "Hide",
+            content: "Hide the second action bar.",
+            leftOffset: 0,
+            topOffset: -30
+        });
+        var tooltip = new Tooltip($delete, {
+            title: "Remove",
+            content: "Remove an item from the action bar and reset it to the default icon.",
+            leftOffset: 0,
+            topOffset: -30
+        });
+
+        displayClosedDrawer();
     }
 
     /* Initialization */
     if (cu.HasAPI()) {
         cu.OnInitialized(() => {
-            cuAPI.CloseUI("skillbar");
-            cuAPI.OnCharacterIDChanged(onCharacterIDChanged);
-            cuAPI.OnAbilityCreated(onAbilityCreated);
-            cuAPI.OnAbilityDeleted(onAbilityDeleted);
-            init();
-        });
+                cu.RequestAbility(BANDAGE_ABILITY_ID, ability => {
+                    ability.icon = '../images/skills/bandage.png';
+                    abilities.unshift(ability);
+                }, true);
+                cuAPI.CloseUI("skillbar");
+                cuAPI.CloseUI("bandage");
+                cuAPI.OnCharacterIDChanged(onCharacterIDChanged);
+                cuAPI.OnAbilityCreated(onAbilityCreated);
+                cuAPI.OnAbilityDeleted(onAbilityDeleted);
+                init();
+            }
+        );
+
     }
 }
