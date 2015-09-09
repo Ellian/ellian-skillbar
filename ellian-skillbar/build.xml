@@ -71,6 +71,11 @@
         <copy file="ellian-spellbook.ui" tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-spellbook.ui"/>
 
         <!-- ELLIAN ACTIONBAR -->
+        <copy file=".\ellian-actionbar\opacityWorker.js"
+              tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-actionbar\opacityWorker.js"/>
+        <copy file=".\ellian-actionbar\opacityWorker.js"
+              tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-actionbar\opacityWorker.js"/>
+
         <copy file=".\ellian-actionbar\ellian-actionbar.css"
               tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-actionbar\ellian-actionbar.css"/>
         <copy file=".\ellian-actionbar\ellian-actionbar.css"
