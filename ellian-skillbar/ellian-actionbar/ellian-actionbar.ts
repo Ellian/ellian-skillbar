@@ -147,7 +147,7 @@ module EllianActionbar {
         localStorage.setItem(DRAG_DATA, JSON.stringify(dragEvent));
         isBarRefreshed = false;
         if (typeof(w) == "undefined") {
-            var w:Worker = new Worker("opacityWorker.js");
+            var w:Worker = new Worker("/assets/WebUI/ellian-actionbar/opacityWorker.js");
             w.onmessage = function (event) {
                 if (isBarRefreshed == false) {
                     refreshActionBar();
@@ -625,6 +625,7 @@ module EllianActionbar {
     if (cu.HasAPI()) {
         cu.OnInitialized(() => {
                 cu.RequestAbility(BANDAGE_ABILITY_ID, ability => {
+                    console.log("bandage found");
                     ability.icon = '../images/skills/bandage.png';
                     abilities.unshift(ability);
                 }, true);

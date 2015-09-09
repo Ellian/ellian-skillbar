@@ -12,12 +12,12 @@ module EllianUI {
     var $uis = cu.FindElement('#uis');
 
     function init() {
-        var but = document.createElement('button');
-        $(but).attr('type', 'button').attr('class', 'button').appendTo($uis);
-        $(but).text("Open Spellbook");
-        $(but).attr("onclick", "openUI('ellian-spellbook')");
+     //   var but = document.createElement('button');
+     //   $(but).attr('type', 'button').attr('class', 'button').appendTo($uis);
+      //  $(but).text("Open Spellbook");
+       // $(but).attr("onclick", "openUI('ellian-spellbook')");
 
-        var but = document.createElement('button');
+   /*     var but = document.createElement('button');
         $(but).attr('type', 'button').attr('class', 'button').appendTo($uis);
         $(but).text("Close Spellbook");
         $(but).attr("onclick", "closeUI('ellian-spellbook')");
@@ -30,7 +30,7 @@ module EllianUI {
         var but = document.createElement('button');
         $(but).attr('type', 'button').attr('class', 'button').appendTo($uis);
         $(but).text("Open Action Bar");
-        $(but).attr("onclick", "openUI('ellian-actionbar')");
+        $(but).attr("onclick", "openUI('ellian-actionbar')");*/
 
         var but = document.createElement('button');
         $(but).attr('type', 'button').attr('class', 'button').appendTo($uis);
