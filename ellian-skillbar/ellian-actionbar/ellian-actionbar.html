@@ -7,6 +7,10 @@
     <link rel="stylesheet" type="text/css" href="ellian-actionbar.css">
 </head>
 <body class="disable-selection">
+<script id="worker" type="javascript/worker">
+    setTimeout(function(){postMessage("isRefreshed"); }, 2000);
+  </script>
+
 <div id="actionbar">
     <div id="actionsbars">
         <div id="actionbar2"></div>

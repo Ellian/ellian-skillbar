@@ -170,6 +170,7 @@ module Spellbook {
 
                 // ellian
                 this.$ability.off("drag").on("drag", this.dragStart);
+                this.$ability.off("mousedown").on("mousedown", this.dragStart);
             }
 
             if (this.componentSlots && this.componentSlots.length) {
@@ -334,7 +335,7 @@ module Spellbook {
 
                     if (_.isString(self.ability.id) && typeof cuAPI === 'object') {
                         cuAPI.ReleaseInputOwnership();
-                        cuAPI.HideUI('spellbook');
+                        cuAPI.HideUI('ellian-spellbook');
                         cuAPI.EditAbility(self.ability.id.toString());
                         cuAPI.ShowUI('ability-builder');
                     }
@@ -1119,7 +1120,7 @@ module Spellbook {
 
         $spellbook.fadeOut(() => {
             if (typeof cuAPI === 'object') {
-                cuAPI.HideUI('spellbook');
+                cuAPI.HideUI('ellian-spellbook');
                 setTimeout(() => {
                     $spellbook.css({display: 'block'});
                 }, 100);
@@ -1445,7 +1446,7 @@ module Spellbook {
                 }
 
                 // start hidden
-                cuAPI.HideUI('spellbook');
+                cuAPI.HideUI('ellian-spellbook');
                 $spellbook.hide();
 
                 cuAPI.OnAbilityCreated(onAbilityCreated);

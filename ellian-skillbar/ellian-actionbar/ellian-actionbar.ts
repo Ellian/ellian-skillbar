@@ -147,11 +147,16 @@ module EllianActionbar {
         localStorage.setItem(DRAG_DATA, JSON.stringify(dragEvent));
         isBarRefreshed = false;
         if (typeof(w) == "undefined") {
-            var w:Worker = new Worker("/assets/WebUI/ellian-actionbar/opacityWorker.js");
+            var blob = new Blob([
+                document.querySelector('#worker').textContent
+            ], {type: "text/javascript"})
+
+            var w:Worker = new Worker(window.URL.createObjectURL(blob));
             w.onmessage = function (event) {
                 if (isBarRefreshed == false) {
                     refreshActionBar();
-                    triggerDrawer();
+                    displayClosedDrawer();
+                    isDrawerDisplayed = false;
                 }
                 w.terminate();
             };
@@ -291,6 +296,7 @@ module EllianActionbar {
                 mapAbilities[abil.id] = abil;
                 console.log("def : " + abil.id + " " + i);
             });
+            abilities.unshift(bandage);
             refreshActionBar();
         });
         if (!req) return;
@@ -304,6 +310,13 @@ module EllianActionbar {
             });
             cu.UpdateAllAbilities(abils);
         });
+        cu.RequestAbility(BANDAGE_ABILITY_ID, ability => {
+            console.log("bandage found");
+            ability.icon = '../images/skills/bandage.png';
+            defaultOrderAbilities[ability.id] = -1;
+            mapAbilities[ability.id] = ability;
+            bandage = ability;
+        }, true);
     }
 
     function refreshActionBar() {
@@ -624,11 +637,6 @@ module EllianActionbar {
     /* Initialization */
     if (cu.HasAPI()) {
         cu.OnInitialized(() => {
-                cu.RequestAbility(BANDAGE_ABILITY_ID, ability => {
-                    console.log("bandage found");
-                    ability.icon = '../images/skills/bandage.png';
-                    abilities.unshift(ability);
-                }, true);
                 cuAPI.CloseUI("skillbar");
                 cuAPI.CloseUI("bandage");
                 cuAPI.OnCharacterIDChanged(onCharacterIDChanged);
@@ -637,6 +645,5 @@ module EllianActionbar {
                 init();
             }
         );
-
     }
 }
