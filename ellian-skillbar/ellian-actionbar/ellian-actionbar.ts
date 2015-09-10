@@ -310,6 +310,7 @@ module EllianActionbar {
             });
             cu.UpdateAllAbilities(abils);
         });
+        console.log("RequestAbility");
         cu.RequestAbility(BANDAGE_ABILITY_ID, ability => {
             console.log("bandage found");
             ability.icon = '../images/skills/bandage.png';
@@ -497,6 +498,7 @@ module EllianActionbar {
     }
 
     function triggerDrawer() {
+        if (tooltipOpenDrawer) tooltipOpenDrawer.destroy();
         if (isDrawerDisplayed) {
             isDrawerDisplayed = false;
             displayClosedDrawer();
@@ -507,15 +509,21 @@ module EllianActionbar {
     }
 
     function displayOpenedDrawer() {
+        if (tooltipOpenDrawer) tooltipOpenDrawer.destroy();
         $drawer.empty();
         var w:number = 4;
-        $drawer.css('width', w * 30);
-        $drawer.css('height', (Math.round(abilities.length / w) + 1) * 30);
+        $drawer.css('width', parseInt($actionsbars.css('width').replace('px', '')));
+        $drawer.css('height', (Math.round(abilities.length / w)) * 30 + 2);
         $drawer.css('left', -w * 30);
-        $drawer.css('top', -(Math.round(abilities.length / w) + 1) * 30);
-        $drawer.css('background-image', "url('../images/spellbook/left-page.png')");
-        $drawer.css('padding-right', '2px');
+        $drawer.css('top', -(Math.round(abilities.length / w)) * 30 + 2);
 
+        var slots = document.createElement('div');
+        $(slots).css('width', w * 30);
+        $drawer.css('height', (Math.round(abilities.length / w)) * 30 + 2);
+        $(slots).css('height', (Math.round(abilities.length / w)) * 30 + 2);
+        $(slots).css('background-image', "url('../images/spellbook/left-page.png')");
+        $(slots).css('padding-right', '2px');
+        $drawer.append(slots);
         abilities.forEach(function (ability, i) {
             var abil = document.createElement('div');
             $(abil).css('content', "url('" + ability.icon + "')");
@@ -527,7 +535,7 @@ module EllianActionbar {
             $(abil).on('mousedown', mouseDown);
             $(abil).attr(ATTR_NUM, ability.id);
             $(abil).attr(ATTR_TYPE, TYPE_ABILITY);
-            $drawer.append(abil);
+            $(slots).append(abil);
         });
         if (tooltipDrawer) tooltipDrawer.destroy();
         tooltipDrawer = new Tooltip($drawer.children(), {leftOffset: 0, topOffset: -30});
@@ -538,7 +546,7 @@ module EllianActionbar {
         $(close).attr('src', '../images/spellbook/btn-close.png');
         $(close).attr('height', '12px').attr('width', '12px');
         $(close).on('click', triggerDrawer);
-        var tooltipOpenDrawer = new Tooltip($(close), {
+        tooltipOpenDrawer = new Tooltip($(close), {
             title: "Close",
             content: "Close the drawer.",
             leftOffset: 0,
@@ -550,11 +558,12 @@ module EllianActionbar {
     }
 
     function displayClosedDrawer() {
+        if (tooltipOpenDrawer) tooltipOpenDrawer.destroy();
         $drawer.empty();
         var open = document.createElement('img');
         $(open).attr('src', '../images/spellbook/btn-add-bookmark.jpg');
         $(open).attr('height', '18px').attr('width', '18px');
-        var tooltipOpenDrawer = new Tooltip($(open), {
+        tooltipOpenDrawer = new Tooltip($(open), {
             title: "Open",
             content: "Open the drawer containing the available abilities and commands.",
             leftOffset: 0,
@@ -562,13 +571,14 @@ module EllianActionbar {
         });
         $drawer.css('left', '-20px');
         $drawer.css('top', '26px');
-        $drawer.css('background-image', "url('../images/spellbook/left-page.png')");
         $drawer.css('width', '18px');
-        $drawer.css('height', '18px');
+        $drawer.css('height', '0px');
         $drawer.css('padding-right', '0px');
         $drawer.append(open);
         $(open).off('click');
         $(open).on('click', triggerDrawer);
+
+        updateActionbarHeight(barConfig.isBar2Displayed);
     }
 
     function init() {
@@ -642,10 +652,6 @@ module EllianActionbar {
                 cuAPI.OnCharacterIDChanged(onCharacterIDChanged);
                 cuAPI.OnAbilityCreated(onAbilityCreated);
                 cuAPI.OnAbilityDeleted(onAbilityDeleted);
-                cu.RequestAbility(BANDAGE_ABILITY_ID, ability => {
-                    ability.icon = '../images/skills/bandage.png';
-                    abilities.unshift(ability);
-                }, true);
                 init();
             }
         );

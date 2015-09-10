@@ -980,22 +980,23 @@ var CU = (function () {
     CU.prototype.RequestAbility = function (id, callback, force) {
         var _this = this;
         var current = this.abilities[id];
+        $.getJSON('../cu/ability.json', function (data) { return _this.UpdateAbility(data); });
+        /*
         if (current && !current.awaitingUpdate && !force) {
             callback(current);
-        }
-        else {
+        } else {
             if (!current) {
                 current = this.abilities[id] = new Ability(this);
                 current.id = id;
             }
             if (!current.awaitingUpdate) {
                 current.awaitingUpdate = [callback];
-            }
-            else {
+            } else {
                 current.awaitingUpdate.push(callback);
             }
-            $.getJSON('http://' + this.ApiHost() + ':8000/api/abilities/' + parseInt(id, 16), function (data) { return _this.UpdateAbility(data); });
-        }
+
+            //$.getJSON('http://' + this.ApiHost() + ':8000/api/abilities/' + parseInt(id, 16), (data) => this.UpdateAbility(data));
+        }*/
     };
     CU.prototype.RequestAllAbilities = function (loginToken, characterID, callback) {
         if (!loginToken || !characterID)

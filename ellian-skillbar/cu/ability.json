@@ -1,0 +1,11 @@
+{
+  "id": "0000000000000086",
+  "icon": "../images/skills/water-Ball.jpg",
+  "cooldowns": [
+    3
+  ],
+  "duration": 13,
+  "triggerTime": 10,
+  "name": "Bandage",
+  "tooltip": "Bandage"
+}

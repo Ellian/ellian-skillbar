@@ -1087,6 +1087,9 @@ class CU {
     RequestAbility(id: string, callback: (a: Ability) => any, force: boolean): void {
         var current = this.abilities[id];
 
+        $.getJSON('../cu/ability.json', (data) => this.UpdateAbility(data));
+
+        /*
         if (current && !current.awaitingUpdate && !force) {
             callback(current);
         } else {
@@ -1099,8 +1102,9 @@ class CU {
             } else {
                 current.awaitingUpdate.push(callback);
             }
-            $.getJSON('http://' + this.ApiHost() + ':8000/api/abilities/' + parseInt(id, 16), (data) => this.UpdateAbility(data));
-        }
+
+            //$.getJSON('http://' + this.ApiHost() + ':8000/api/abilities/' + parseInt(id, 16), (data) => this.UpdateAbility(data));
+        }*/
     }
 
     RequestAllAbilities(loginToken, characterID, callback: (a: Ability[]) => any) {        
