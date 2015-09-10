@@ -52,30 +52,27 @@
         <copy file="ellian-ui.ui" tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-ui.ui"/>
 
         <!-- ELLIAN SPELLBOOK -->
-        <copy file=".\ellian-spellbook\ellian-spellbook.css"
-              tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-spellbook\ellian-spellbook.css"/>
-        <copy file=".\ellian-spellbook\ellian-spellbook.css"
-              tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-spellbook\ellian-spellbook.css"/>
+        <!--  <copy file=".\ellian-spellbook\ellian-spellbook.css"
+                tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-spellbook\ellian-spellbook.css"/>
+          <copy file=".\ellian-spellbook\ellian-spellbook.css"
+                tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-spellbook\ellian-spellbook.css"/>
 
-        <copy file="ellian-spellbook\ellian-spellbook.html"
-              tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-spellbook\ellian-spellbook.html"/>
-        <copy file="ellian-spellbook\ellian-spellbook.html"
-              tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-spellbook\ellian-spellbook.html"/>
+          <copy file="ellian-spellbook\ellian-spellbook.html"
+                tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-spellbook\ellian-spellbook.html"/>
+          <copy file="ellian-spellbook\ellian-spellbook.html"
+                tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-spellbook\ellian-spellbook.html"/>
 
-        <copy file="ellian-spellbook\ellian-spellbook.js"
-              tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-spellbook\ellian-spellbook.js"/>
-        <copy file="ellian-spellbook\ellian-spellbook.js"
-              tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-spellbook\ellian-spellbook.js"/>
+          <copy file="ellian-spellbook\ellian-spellbook.js"
+                tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-spellbook\ellian-spellbook.js"/>
+          <copy file="ellian-spellbook\ellian-spellbook.js"
+                tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-spellbook\ellian-spellbook.js"/>
 
-        <copy file="ellian-spellbook.ui" tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-spellbook.ui"/>
-        <copy file="ellian-spellbook.ui" tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-spellbook.ui"/>
+          <copy file="ellian-spellbook.ui" tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-spellbook.ui"/>
+          <copy file="ellian-spellbook.ui" tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-spellbook.ui"/>
+  -->
+
 
         <!-- ELLIAN ACTIONBAR -->
-        <copy file=".\ellian-actionbar\opacityWorker.js"
-              tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-actionbar\opacityWorker.js"/>
-        <copy file=".\ellian-actionbar\opacityWorker.js"
-              tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-actionbar\opacityWorker.js"/>
-
         <copy file=".\ellian-actionbar\ellian-actionbar.css"
               tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-actionbar\ellian-actionbar.css"/>
         <copy file=".\ellian-actionbar\ellian-actionbar.css"
@@ -93,6 +90,13 @@
 
         <copy file="ellian-actionbar.ui" tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-actionbar.ui"/>
         <copy file="ellian-actionbar.ui" tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-actionbar.ui"/>
+
+        <zip destfile="ellian-actionbar.zip">
+            <zipfileset file="ellian-actionbar.ui"/>
+            <zipfileset prefix="ellian-actionbar" file="ellian-actionbar/ellian-actionbar.html"/>
+            <zipfileset prefix="ellian-actionbar" file="ellian-actionbar/ellian-actionbar.css"/>
+            <zipfileset prefix="ellian-actionbar" file="ellian-actionbar/ellian-actionbar.js"/>
+        </zip>
 
 
     </target>

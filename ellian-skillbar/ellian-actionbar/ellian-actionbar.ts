@@ -34,6 +34,7 @@ module EllianActionbar {
     var $downarrow = cu.FindElement('#downarrow');
     var $delete = cu.FindElement('#delete');
     var $drawer = cu.FindElement('#drawer');
+    var $tooltip = cu.FindElement('#tooltip');
 
     /* Variables */
     var bandage:Ability;
@@ -140,26 +141,31 @@ module EllianActionbar {
     }
 
     function mouseDown(e:MouseEvent) {
+        $tooltip.empty();
+        $tooltip.removeAttr('style');
         console.log("mousedown " + this.id + " " + this.style.opacity);
         this.style.opacity = "0.4";
-        dragSrcEl = this;
-        var dragEvent:DragData = new DragData(this.getAttribute(ATTR_NUM), this.getAttribute(ATTR_TYPE));
-        localStorage.setItem(DRAG_DATA, JSON.stringify(dragEvent));
-        isBarRefreshed = false;
-        if (typeof(w) == "undefined") {
-            var blob = new Blob([
-                document.querySelector('#worker').textContent
-            ], {type: "text/javascript"})
+        if (dragSrcEl != this) {
+            dragSrcEl = this;
+            isBarRefreshed = false;
+            if (typeof(w) == "undefined") {
+                var blob = new Blob([
+                    document.querySelector('#worker').textContent
+                ], {type: "text/javascript"})
 
-            var w:Worker = new Worker(window.URL.createObjectURL(blob));
-            w.onmessage = function (event) {
-                if (isBarRefreshed == false) {
-                    refreshActionBar();
-                    displayClosedDrawer();
-                    isDrawerDisplayed = false;
-                }
-                w.terminate();
-            };
+                var w:Worker = new Worker(window.URL.createObjectURL(blob));
+                w.onmessage = function (event) {
+                    if (isBarRefreshed == false) {
+                        refreshActionBar();
+                        dragSrcEl = null;
+                        if (isDrawerDisplayed) {
+                            displayClosedDrawer();
+                            isDrawerDisplayed = false;
+                        }
+                    }
+                    w.terminate();
+                };
+            }
         }
         e.stopPropagation();
     }
@@ -207,24 +213,6 @@ module EllianActionbar {
                 localStorage.setItem(BAR_CONTENT, JSON.stringify(barContent));
                 refreshActionBar();
             }
-            /*    } else {
-             // TODO drag from spell book
-             if (localStorage.getItem(DRAG_DATA) != null) {
-             var dragData:DragData = JSON.parse(localStorage.getItem(DRAG_DATA));
-             if (new Date().getTime() - dragData.time < 5000) {
-             // the drag event is recent
-             console.log("spell " + dragData.id);
-             var newSlot:SlotData = new SlotData(dragData.id, dragData.type);
-             if (this.id.substring(0, 4) == "bar1") {
-             barContent.bar1[parseInt(this.id.replace("bar1-slot", ""))] = newSlot;
-             } else {
-             barContent.bar2[parseInt(this.id.replace("bar2-slot", ""))] = newSlot;
-             }
-             localStorage.setItem(BAR_CONTENT, JSON.stringify(barContent));
-             refreshActionBar();
-             }
-             localStorage.removeItem(DRAG_DATA);
-             }*/
         }
         dragSrcEl = null;
         e.stopPropagation();
@@ -296,7 +284,9 @@ module EllianActionbar {
                 mapAbilities[abil.id] = abil;
                 console.log("def : " + abil.id + " " + i);
             });
-            abilities.unshift(bandage);
+            if (bandage != null) {
+                abilities.unshift(bandage);
+            }
             refreshActionBar();
         });
         if (!req) return;
@@ -436,6 +426,7 @@ module EllianActionbar {
         var slot = document.createElement('div');
         slot.addEventListener("dragover", allowDrop, false);
         slot.addEventListener("mousedown", mouseDown, true);
+        slot.addEventListener("drag", mouseDown, true);
         slot.addEventListener("mouseup", mouseUp, true);
         slot.addEventListener("drop", mouseUp, true);
         $(slot).attr('draggable', 'true');
@@ -512,10 +503,11 @@ module EllianActionbar {
         if (tooltipOpenDrawer) tooltipOpenDrawer.destroy();
         $drawer.empty();
         var w:number = 4;
-        $drawer.css('width', parseInt($actionsbars.css('width').replace('px', '')));
+        //$drawer.css('width', parseInt($actionsbars.css('width').replace('px', '')));
+        $drawer.css('width', w * 30 + 5);
         $drawer.css('height', (Math.round(abilities.length / w)) * 30 + 2);
-        $drawer.css('left', -w * 30);
-        $drawer.css('top', -(Math.round(abilities.length / w)) * 30 + 2);
+        $drawer.css('left', -w * 30 - 5);
+        $drawer.css('bottom', '10px');
 
         var slots = document.createElement('div');
         $(slots).css('width', w * 30);
@@ -527,12 +519,14 @@ module EllianActionbar {
         abilities.forEach(function (ability, i) {
             var abil = document.createElement('div');
             $(abil).css('content', "url('" + ability.icon + "')");
+            $(abil).attr('id', 'drawer_' + ability.id);
             $(abil).attr('class', 'drawerSlot');
             if (ability.name)
                 $(abil).attr('data-tooltip-title', ability.name);
             if (ability.tooltip)
                 $(abil).attr('data-tooltip-content', ability.tooltip);
             $(abil).on('mousedown', mouseDown);
+            $(abil).on('drag', mouseDown);
             $(abil).attr(ATTR_NUM, ability.id);
             $(abil).attr(ATTR_TYPE, TYPE_ABILITY);
             $(slots).append(abil);
@@ -570,7 +564,7 @@ module EllianActionbar {
             topOffset: -30
         });
         $drawer.css('left', '-20px');
-        $drawer.css('top', '26px');
+        $drawer.css('bottom', '18px');
         $drawer.css('width', '18px');
         $drawer.css('height', '0px');
         $drawer.css('padding-right', '0px');
