@@ -127,6 +127,7 @@ var Spellbook;
                 this.$ability.off('click').on('click', this.select.bind(this));
                 // ellian
                 this.$ability.off("drag").on("drag", this.dragStart);
+                this.$ability.off("mousedown").on("mousedown", this.dragStart);
             }
             if (this.componentSlots && this.componentSlots.length) {
                 this.componentSlots.forEach(function (slot) { return slot.bindEvents(); });
@@ -250,7 +251,7 @@ var Spellbook;
                     e.stopPropagation();
                     if (_.isString(self.ability.id) && typeof cuAPI === 'object') {
                         cuAPI.ReleaseInputOwnership();
-                        cuAPI.HideUI('spellbook');
+                        cuAPI.HideUI('ellian-spellbook');
                         cuAPI.EditAbility(self.ability.id.toString());
                         cuAPI.ShowUI('ability-builder');
                     }
@@ -884,7 +885,7 @@ var Spellbook;
         }
         Spellbook.$spellbook.fadeOut(function () {
             if (typeof cuAPI === 'object') {
-                cuAPI.HideUI('spellbook');
+                cuAPI.HideUI('ellian-spellbook');
                 setTimeout(function () {
                     Spellbook.$spellbook.css({ display: 'block' });
                 }, 100);
@@ -1130,7 +1131,7 @@ var Spellbook;
                     spellBookInitialize();
                 }
                 // start hidden
-                cuAPI.HideUI('spellbook');
+                cuAPI.HideUI('ellian-spellbook');
                 Spellbook.$spellbook.hide();
                 cuAPI.OnAbilityCreated(onAbilityCreated);
                 cuAPI.OnAbilityDeleted(onAbilityDeleted);
