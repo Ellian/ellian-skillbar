@@ -88,6 +88,16 @@
         <copy file="ellian-actionbar\ellian-actionbar.js"
               tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-actionbar\ellian-actionbar.js"/>
 
+        <copy file="ellian-actionbar\ellian-actionbar.ts"
+              tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-actionbar\ellian-actionbar.ts"/>
+        <copy file="ellian-actionbar\ellian-actionbar.ts"
+              tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-actionbar\ellian-actionbar.ts"/>
+
+        <copy file="ellian-actionbar\ellian-actionbar.js.map"
+              tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-actionbar\ellian-actionbar.js.map"/>
+        <copy file="ellian-actionbar\ellian-actionbar.js.map"
+              tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-actionbar\ellian-actionbar.js.map"/>
+
         <copy file="ellian-actionbar.ui" tofile="${env.CU_HOME}\bin\4\client\assets\webui\ellian-actionbar.ui"/>
         <copy file="ellian-actionbar.ui" tofile="${env.CU_HOME}\bin\10\client\assets\webui\ellian-actionbar.ui"/>
 

@@ -148,24 +148,22 @@ module EllianActionbar {
         if (dragSrcEl != this) {
             dragSrcEl = this;
             isBarRefreshed = false;
-            if (typeof(w) == "undefined") {
-                var blob = new Blob([
-                    document.querySelector('#worker').textContent
-                ], {type: "text/javascript"})
+            var blob = new Blob([
+                document.querySelector('#worker').textContent
+            ], {type: "text/javascript"})
 
-                var w:Worker = new Worker(window.URL.createObjectURL(blob));
-                w.onmessage = function (event) {
-                    if (isBarRefreshed == false) {
-                        refreshActionBar();
-                        dragSrcEl = null;
-                        if (isDrawerDisplayed) {
-                            displayClosedDrawer();
-                            isDrawerDisplayed = false;
-                        }
+            var w:Worker = new Worker(window.URL.createObjectURL(blob));
+            w.onmessage = function (event) {
+                if (isBarRefreshed == false) {
+                    refreshActionBar();
+                    dragSrcEl = null;
+                    if (isDrawerDisplayed) {
+                        displayClosedDrawer();
+                        isDrawerDisplayed = false;
                     }
-                    w.terminate();
-                };
-            }
+                }
+                w.terminate();
+            };
         }
         e.stopPropagation();
     }
@@ -218,8 +216,8 @@ module EllianActionbar {
         e.stopPropagation();
     }
 
-    function onAbilityCreated(id, a) {
-        console.log("onAbilityCreated " + id);
+    function onActionBarAbilityCreated(id, a) {
+        console.log("onActionBarAbilityCreated " + id);
         var craftedAbility = JSON.parse(a);
         craftedAbility.id = craftedAbility.id.toString(16);
         craftedAbility.tooltip = craftedAbility.tooltip || craftedAbility.notes;
@@ -496,6 +494,18 @@ module EllianActionbar {
         } else {
             isDrawerDisplayed = true;
             displayOpenedDrawer();
+            var blob = new Blob([
+                document.querySelector('#worker').textContent
+            ], {type: "text/javascript"})
+
+            var w:Worker = new Worker(window.URL.createObjectURL(blob));
+            w.onmessage = function (event) {
+                if (isDrawerDisplayed == true) {
+                    displayClosedDrawer();
+                    isDrawerDisplayed = false;
+                }
+                w.terminate();
+            };
         }
     }
 
@@ -503,16 +513,16 @@ module EllianActionbar {
         if (tooltipOpenDrawer) tooltipOpenDrawer.destroy();
         $drawer.empty();
         var w:number = 4;
+        var h:number = 31;
         //$drawer.css('width', parseInt($actionsbars.css('width').replace('px', '')));
-        $drawer.css('width', w * 30 + 5);
-        $drawer.css('height', (Math.round(abilities.length / w)) * 30 + 2);
-        $drawer.css('left', -w * 30 - 5);
+        $drawer.css('width', w * h);
+        $drawer.css('height', (Math.round((abilities.length + 1) / w)) * h - 2);
+        $drawer.css('left', -w * h - 2);
         $drawer.css('bottom', '10px');
 
         var slots = document.createElement('div');
-        $(slots).css('width', w * 30);
-        $drawer.css('height', (Math.round(abilities.length / w)) * 30 + 2);
-        $(slots).css('height', (Math.round(abilities.length / w)) * 30 + 2);
+        $(slots).css('width', w * h);
+        $(slots).css('height', (Math.round((abilities.length + 1) / w)) * h - 2);
         $(slots).css('background-image', "url('../images/spellbook/left-page.png')");
         $(slots).css('padding-right', '2px');
         $drawer.append(slots);
@@ -536,7 +546,7 @@ module EllianActionbar {
 
         var close = document.createElement('img');
         $(close).attr('id', 'close');
-        $(close).css('left', w * 30 + 2);
+        $(close).css('left', w * h + 2);
         $(close).attr('src', '../images/spellbook/btn-close.png');
         $(close).attr('height', '12px').attr('width', '12px');
         $(close).on('click', triggerDrawer);
@@ -634,7 +644,6 @@ module EllianActionbar {
             leftOffset: 0,
             topOffset: -30
         });
-
         displayClosedDrawer();
     }
 
@@ -643,11 +652,16 @@ module EllianActionbar {
         cu.OnInitialized(() => {
                 cuAPI.CloseUI("skillbar");
                 cuAPI.CloseUI("bandage");
+
                 cuAPI.OnCharacterIDChanged(onCharacterIDChanged);
-                cuAPI.OnAbilityCreated(onAbilityCreated);
-                cuAPI.OnAbilityDeleted(onAbilityDeleted);
-                init();
+
+                //      cuAPI.OnAbilityCreated(onActionBarAbilityCreated);
+
+                //    cuAPI.OnAbilityDeleted(onAbilityDeleted);
             }
         );
+        cuAPI.OnAbilityCreated(onActionBarAbilityCreated);
+        cuAPI.OnAbilityDeleted(onAbilityDeleted);
+        init();
     }
 }

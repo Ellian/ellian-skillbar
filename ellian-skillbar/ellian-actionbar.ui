@@ -7,8 +7,8 @@
         "right": 1380,
         "bottom": 900
     },
-    "handlesAbilities": true,
     "handlesCharacter": true,
+    "handlesAbilities": true,
     "handlesConfig": true,
     "handlesInput": true,
     "layer": 1

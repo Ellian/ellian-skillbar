@@ -12,25 +12,25 @@ module EllianUI {
     var $uis = cu.FindElement('#uis');
 
     function init() {
-     //   var but = document.createElement('button');
-     //   $(but).attr('type', 'button').attr('class', 'button').appendTo($uis);
-      //  $(but).text("Open Spellbook");
-       // $(but).attr("onclick", "openUI('ellian-spellbook')");
-
-   /*     var but = document.createElement('button');
-        $(but).attr('type', 'button').attr('class', 'button').appendTo($uis);
-        $(but).text("Close Spellbook");
-        $(but).attr("onclick", "closeUI('ellian-spellbook')");
+        //   var but = document.createElement('button');
+        //   $(but).attr('type', 'button').attr('class', 'button').appendTo($uis);
+        //  $(but).text("Open Spellbook");
+        // $(but).attr("onclick", "openUI('ellian-spellbook')");
 
         var but = document.createElement('button');
         $(but).attr('type', 'button').attr('class', 'button').appendTo($uis);
-        $(but).text("Toggle Spellbook");
-        $(but).attr("onclick", "toggleUIVisibility('ellian-spellbook')");
+        $(but).text("Open skillbar");
+        $(but).attr("onclick", "openUI('ellian-skillbar.ui')");
+
+        var but = document.createElement('button');
+        $(but).attr('type', 'button').attr('class', 'button').appendTo($uis);
+        $(but).text("Close skillbar");
+        $(but).attr("onclick", "closeUI('ellian-skillbar')");
 
         var but = document.createElement('button');
         $(but).attr('type', 'button').attr('class', 'button').appendTo($uis);
         $(but).text("Open Action Bar");
-        $(but).attr("onclick", "openUI('ellian-actionbar')");*/
+        $(but).attr("onclick", "openUI('ellian-actionbar.ui')");
 
         var but = document.createElement('button');
         $(but).attr('type', 'button').attr('class', 'button').appendTo($uis);
@@ -56,7 +56,7 @@ function closeUI(name:string) {
     cuAPI.CloseUI(name);
 }
 
-function toggleUIVisibility(name: string){
+function toggleUIVisibility(name:string) {
     console.log("toggleUIVisibility " + name);
     cuAPI.ToggleUIVisibility(name);
 }
